@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ __('FLIT SHOP') }} {% endblock %}
+
+{% block head %}
+<style>
+
+</style>
+<script>
+
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+{% include 'templates.navbar.html' %}
+<!-- Navigation Bar -->
+
+<div class="container documents" width="100%">
+
+  <div class="row"><!-- PRODUCT -->
+    <div class="col-sm-6 col-md-3">
+      <div class="thumbnail">
+        <img class="img-rounded" src="http://lorempixel.com/500/500">
+        <div class="caption text-left">
+          <h3>제품명 <span class="badge badge-info pull-right">{{ sails.config.project.currency.symbol }}15,000</span></h3>
+          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id ...</p>
+          <p>
+            <a href="#" class="btn btn-primary" role="button">{{ __('구입') }}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="thumbnail">
+        <img class="img-rounded" src="http://lorempixel.com/500/500">
+        <div class="caption text-left">
+          <h3>제품명 <span class="badge badge-info pull-right">{{ sails.config.project.currency.symbol }}15,000</span></h3>
+          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id ...</p>
+          <p>
+            <a href="#" class="btn btn-primary" role="button">{{ __('구입') }}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="thumbnail">
+        <img class="img-rounded" src="http://lorempixel.com/500/500">
+        <div class="caption text-left">
+          <h3>제품명 <span class="badge badge-info pull-right">{{ sails.config.project.currency.symbol }}15,000</span></h3>
+          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id ...</p>
+          <p>
+            <a href="#" class="btn btn-primary" role="button">{{ __('구입') }}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-md-3">
+      <div class="thumbnail">
+        <img class="img-rounded" src="http://lorempixel.com/500/500">
+        <div class="caption text-left">
+          <h3>제품명 <span class="badge badge-info pull-right">{{ sails.config.project.currency.symbol }}15,000</span></h3>
+          <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id ...</p>
+          <p>
+            <a href="#" class="btn btn-primary" role="button">{{ __('구입') }}</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div><!-- PRODUCT -->
+
+
+  <div class="row">
+
+    {% include 'templates.footer.html' %}
+  </div>
+</div><!-- /.container -->
+
+<script type="text/javascript">
+
+</script>
+{% endblock %};
