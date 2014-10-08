@@ -32,7 +32,8 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'index' },
+  // '/': { view: 'index' },
+  'GET /'                 : 'ProductController.list',
 
   /***************************************************************************
   *                                                                          *
@@ -44,13 +45,24 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
+  // ADMIN
+  'GET  /admin/product'   : 'AdminController.product',
+  // '/admin': {
+  //   view: 'admin',
+  //   locals: {
+  //     layout: 'products'
+  //   }
+  // },
+
   // USER
-  'POST /login': 'UserController.login',
-  'POST /signup': 'UserController.create',
-  'POST /reset': 'UserController.reset',
-  'GET  /logout': 'UserController.logout',
+  'POST /login'   : 'UserController.login',
+  'POST /signup'  : 'UserController.create',
+  'POST /reset'   : 'UserController.reset',
+  'GET  /logout'  : 'UserController.logout',
 
   // PRODUCT
 
   // ORDER
+
+  // FILE & UPLOAD
 };

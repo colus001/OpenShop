@@ -11,6 +11,9 @@ module.exports = {
       type: 'STRING',
       required: true
     },
+    thumbnail: {
+      type: 'STRING',
+    },
     photos: {
       type: 'ARRAY'
     },
@@ -29,9 +32,9 @@ module.exports = {
       type: 'BOOLEAN',
       defaultsTo: false
     },
-    linked: {
+    related: {
       collection: 'Product',
-      via: 'linked'
+      via: 'related'
     },
     tags: {
       type: 'ARRAY'
@@ -43,6 +46,28 @@ module.exports = {
     //   model: 'Category',
     //   required: true
     // },
+  },
+
+  beforeValidate: function (values, callback) {
+    var photosValue = [];
+    var tagsValue = [];
+
+    var photoArray = values.photos[0].split(',');
+    var tagsArray = values.tags[0].split(',');
+
+    for ( var i in photoArray )
+      photosValue.push(photoArray[i].trim());
+
+    for ( var j in tagsArray )
+      tagsValue.push(tagsArray[i].trim());
+
+    values.photos = photosValue;
+    values.tags = tagsValue;
+
+    console.log(values);
+
+    callback();
+    return;
   }
 };
 

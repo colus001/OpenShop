@@ -16,7 +16,8 @@
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
   'styles/dependencies/bootstrap.min.css',
-  'styles/**/*.css'
+  'styles/dependencies/**/*.css',
+  // 'styles/**/*.css'
 ];
 
 
@@ -29,12 +30,13 @@ var jsFilesToInject = [
 
   // Dependencies like jQuery, or Angular are brought in here
   'js/dependencies/jquery-2.1.1.min.js',
-  'js/dependencies/**/*.js',
-  '!js/dependencies/language/**',
+  'js/dependencies*.js',
+  // '!js/dependencies/language/**',
+  // '!js/vendor/*.js',
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  'js/**/*.js'
+  // 'js/**/*.js'
 ];
 
 
