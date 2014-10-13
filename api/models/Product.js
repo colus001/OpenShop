@@ -49,22 +49,29 @@ module.exports = {
   },
 
   beforeValidate: function (values, callback) {
-    var photosValue = [];
-    var tagsValue = [];
+    console.log('values:', values);
 
-    var photoArray = values.photos[0].split(',');
-    var tagsArray = values.tags[0].split(',');
+    if ( values.photos ) {
+      var photosValue = [];
+      var photoArray = values.photos[0].split(',');
 
-    for ( var i in photoArray )
-      photosValue.push(photoArray[i].trim());
+      for ( var i in photoArray )
+        photosValue.push(photoArray[i].trim());
 
-    for ( var j in tagsArray )
-      tagsValue.push(tagsArray[i].trim());
+      console.log('photoArray:', photoArray);
 
-    values.photos = photosValue;
-    values.tags = tagsValue;
+      values.photos = photosValue;
+    }
 
-    console.log(values);
+    if ( values.tags ) {
+      var tagsValue = [];
+      var tagsArray = values.tags[0].split(',');
+
+      for ( var j in tagsArray )
+        tagsValue.push(tagsArray[j].trim());
+
+      values.tags = tagsValue;
+    }
 
     callback();
     return;

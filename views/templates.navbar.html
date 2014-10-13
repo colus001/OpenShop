@@ -20,6 +20,9 @@
       </form>
 
       <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="/cart"><i class="fa fa-fw fa-shopping-cart"></i> {{ __('장바구니') }} &nbsp; <span class="badge badge-default">{{ cart.length }}</span></a>
+        </li>
         <li class="dropdown">
           {% if !user %}
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">

@@ -1,0 +1,110 @@
+{% extends 'layout.html' %}
+
+{% block title %} PRODUCT MANAGER {% endblock %}
+
+{% block head %}
+  {% parent %}
+  <!-- STYLESHEETS -->
+  <!-- SCRIPTS -->
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h2>{{ __('장바구니') }} <a href="/cart/clear" class="btn btn-warning pull-right">{{ __('장바구니 비우기') }}</a></h3>
+
+  <hr />
+
+  {% if cart.length <= 0 %}
+  <h2>{{ __('현재 장바구니가 비어있습니다') }}</h2>
+  {% else %}
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>{{ __('이름') }}</th>
+            <th>{{ __('가격') }}</th>
+            <th>{{ __('수량') }}</th>
+            <th>{{ __('합계') }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in cart %}
+          <a href="#">
+            <tr data-id="{{ product.id }}">
+              <td>{{ loop.index }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ sails.config.project.currency.symbol }}{{ product.price|currency }}</td>
+              <td><input class="form-control" type="text" value="{{ product.quantity }}"/></td>
+              <td>{{ sails.config.project.currency.symbol }}{{ (product.price * product.quantity)|currency }}</td>
+              <td>
+                <button class="btn btn-xs btn-primary" button-action="apply">APPLY</button>
+                <button class="btn btn-xs btn-danger" button-action="delete">DELETE</button>
+              </td>
+            </tr>
+          </a>
+          {% endfor %}
+
+          <tr>
+            <td colspan="3">{{ __('합계') }}</td>
+            <td>{{ total }}</td>
+            <td colspan>{{ sails.config.project.currency.symbol }}{{ summary|currency }}</td>
+            <td><a href="/checkout" class="btn btn-success">{{ __('주문하기') }}</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  $('[button-action="apply"]').on('click', function () {
+    var product_id = $(this).parent().parent().data('id');
+    var quantity = $(this).parent().parent().find('input').val();
+
+    $.ajax({
+      type: 'PUT',
+      url: '/cart/apply/' + product_id + '?quantity=' + quantity,
+      success: function (data, status) {
+        window.location = '/cart';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+
+  // POST DELETE
+  $('[button-action="delete"]').on('click', function () {
+    if ( !confirm ('Do you really want to delete this?') ) {
+      return;
+    }
+
+    var product_id = $(this).parent().parent().data('id');
+
+    $.ajax({
+      type: 'DELETE',
+      url: '/product/' + product_id,
+      success: function (data, status) {
+        alert('Deleted succesfully.');
+        window.location = '/admin/product';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+});
+</script>
+
+
+{% endblock %}

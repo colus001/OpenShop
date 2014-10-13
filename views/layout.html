@@ -43,6 +43,10 @@
 
   <body>
     <script src="/js/dependencies/jquery-2.1.1.min.js"></script>
+    <!-- Navigation Bar -->
+    {% include 'templates.navbar.html' %}
+    <!-- Navigation Bar -->
+
     {% block content %}
     <!--
         Client-side Templates
@@ -93,6 +97,11 @@
 
     -->
     {% endblock %}
+
+    <!-- Footer -->
+    {% include 'templates.footer.html' %}
+    <!-- Footer -->
+
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
     <script src="/js/dependencies/jquery-2.1.1.min.js"></script>

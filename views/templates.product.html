@@ -1,0 +1,12 @@
+<div class="col-sm-6 col-md-3">
+  <div class="thumbnail">
+    <a href="/product/{{ product.id }}"><img class="img-rounded" src="{% if product.thumbnail %}{{ product.thumbnail }}{% else %}http://lorempixel.com/500/500{% endif %}">
+    <div class="caption text-left">
+      <h3>{{ product.name }}</a> <span class="badge badge-info pull-right">{{ sails.config.project.currency.symbol }}{{ product.price|currency }}</span></h3>
+      <p class="ellipsis">{{ product.description }}</p>
+      <p>
+        <a href="#" class="btn btn-primary" role="button">{{ __('구입') }}</a>
+      </p>
+    </div>
+  </div>
+</div>

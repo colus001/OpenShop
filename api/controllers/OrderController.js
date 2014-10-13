@@ -6,6 +6,8 @@
  */
 
 module.exports = {
-	
+  checkout: function (req, res)	{
+
+  }
 };
 

@@ -4,17 +4,22 @@
 
 {% block head %}
 <style>
-
+.ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-wrap:break-word;
+}
 </style>
+
 <script>
 
 </script>
 {% endblock %}
 
 {% block content %}
-<!-- Navigation Bar -->
-{% include 'templates.navbar.html' %}
-<!-- Navigation Bar -->
 
 <div class="container documents" width="100%">
   {% for product in products %}
@@ -23,12 +28,14 @@
   {% endif %}
     <div class="col-sm-6 col-md-3">
       <div class="thumbnail">
-        <img class="img-rounded" src="http://lorempixel.com/500/500">
+        <a href="/product/view/{{ product.id }}"><img class="img-rounded" src="{% if product.thumbnail %}{{ product.thumbnail }}{% else %}http://lorempixel.com/500/500{% endif %}">
         <div class="caption text-left">
-          <h3>{{ product.name }} <span class="badge badge-info pull-right">{{ sails.config.project.currency.symbol }}{{ product.price }}</span></h3>
-          <p>{{ product.description }}</p>
+          <h3>{{ product.name }}</a> <span class="badge badge-info pull-right">{{ sails.config.project.currency.symbol }}{{ product.price|currency }}</span></h3>
+          <p class="ellipsis">{{ product.description }}</p>
           <p>
-            <a href="#" class="btn btn-primary" role="button">{{ __('구입') }}</a>
+            <input type="text" style="width: 20px;" value="1" /> 개
+            <button data-id="{{ product.id }}" data-role="add" class="btn btn-default">{{ __('장바구니에 넣기') }}</button>
+            <a href="/cart/buy/{{ product.id }}" class="btn btn-primary" role="button">{{ __('구입') }}</a>
           </p>
         </div>
       </div>
@@ -37,14 +44,29 @@
   </div><!-- PRODUCT -->
   {% endif %}
   {% endfor %}
-
-  <div class="row">
-
-    {% include 'templates.footer.html' %}
-  </div>
 </div><!-- /.container -->
 
 <script type="text/javascript">
+$(document).ready(function () {
+  var add = $('button[data-role="add"]');
 
+  add.on('click', function () {
+    var product_id = $(this).data('id');
+    var quantity = $(this).parent().find('input').val();
+
+    $.ajax({
+      type: 'GET',
+      url: '/cart/add/' + product_id + '?quantity=' + quantity,
+      success: function (data, status) {
+        window.location = '/';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+});
 </script>
 {% endblock %};

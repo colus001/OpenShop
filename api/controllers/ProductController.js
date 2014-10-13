@@ -6,6 +6,20 @@
  */
 
 module.exports = {
+  view: function (req, res) {
+    Product.findOne(req.params.id, function (err, product) {
+      if (err) return res.serverError(err);
+      if (!product) return res.serverError('NO_PRODUCT_FOUND');
+
+      var result = {
+        cart: req.session.cart,
+        product: product
+      }
+
+      return res.view('product.html', result);
+    });
+  },
+
   list: function (req, res) {
     var result = {};
 
@@ -24,8 +38,8 @@ module.exports = {
       },
 
       function GetProductList (next) {
-        Product.find({}, function (err, products) {
-          if (err) res.serverError(err);
+        Product.find({ isSelling: true }, function (err, products) {
+          if (err) next(err);
 
           result.products = products;
 
@@ -33,11 +47,49 @@ module.exports = {
         });
       }
     ], function (err) {
-      if (err) res.serverError(err);
+      if (err) return res.serverError(err);
+
+      if ( req.session.hasOwnProperty('cart') )
+        result.cart = req.session.cart;
+      else
+        result.cart = [];
 
       return res.view('index.html', result);
     });
-  }
+  },
+
+  status: function (req, res) {
+    Product.findOne(req.params.id, function (err, product) {
+      if (err) return res.serverError(err);
+      if (!product) return res.send('NO_PRODUCT_FOUND');
+
+      product.isSelling = !product.isSelling;
+      product.save(function (err, product) {
+        if (err) return res.send(err);
+
+        var result = {
+          result: 'success',
+          product: product
+        };
+
+        return res.json(result);
+      });
+    });
+  },
+
+  // update: function (req, res) {
+  //   console.log(req.body);
+
+  //   var id = req.body.edit;
+  //   delete req.body.edit;
+
+  //   Product.update(id, req.body, function (err, product) {
+  //     if (err) return res.serverError(err);
+
+  //     return res.json(product);
+  //   });
+  // }
+
   // create: function (req, res) {
   //   async.waterfall([
   //     function UploadThumbnail (next) {

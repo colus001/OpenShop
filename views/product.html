@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ name }} {% endblock %}
+
+{% block head %}
+<style>
+.preview {
+  width: 100%;
+  cursor: hand;
+}
+</style>
+
+<script>
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container" width="100%">
+  <div class="row">
+    <div class="col-sm-6">
+      <a href="{{ product.thumbnail }}"><img src="{{ product.thumbnail }}" width="100%" id="thumbnail" class="thumbnail" /></a>
+
+      {% if product.photos.length == 0 %}
+      <div class="row">
+        <div class="col-sm-4">
+          <img src="{{ product.thumbnail }}" alt="" class="thumbnail preview" />
+        </div>
+      </div>
+      {% endif %}
+
+      {% for photo in product.photos %}
+      {% if loop.index == 1 || loop.index%3 == 0 %}
+      <div class="row">
+      {% endif %}
+
+        {% if loop.index == 1 %}
+        <div class="col-sm-4">
+          <img src="{{ product.thumbnail }}" alt="" class="thumbnail preview" />
+        </div>
+        {% endif %}
+
+        <div class="col-sm-4">
+          <img src="{{ photo }}" alt="" class="thumbnail preview" />
+        </div>
+
+      {% if loop.index%3 == 2 || loop.last %}
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="col-sm-6">
+      <h3>{{ product.name }}
+        {% if product.stock < 0 %}
+        <span class="badge badge-success"> {{ __('재고있음') }} </span>
+        {% elseif product.stock > 0 %}
+        <span class="badge badge-success"> {{ __('재고') }}: {{ product.stock }} </span>
+        {% else %}
+        <span class="badge"> {{ __('재고없음') }} </span>
+        {% endif %}
+      </h3>
+      <hr>
+
+      <h4>{{ sails.config.project.currency.symbol }}{{ product.price|currency }}</h4>
+      <hr>
+
+      <div class="form-group form-inline">
+        <label for="quantity">{{ __('수량') }} : </label>
+        <input type="text" class="form-control" id="quantity" name="quantity" value="1">
+      </div>
+      <button data-id="{{ product.id }}" data-role="add" class="btn btn-default btn-lg" >{{ __('장바구니에 넣기') }}</button>
+      <a href="/cart/buy/{{ product.id }}" class="btn btn-primary btn-lg" role="button">{{ __('구입') }}</a>
+      <hr>
+
+      <h4>{{ __('설명') }}</h4>
+      <div>{{ product.description }}</div>
+    </div>
+  </div>
+</div><!-- /.container -->
+
+<script type="text/javascript">
+$(document).ready(function () {
+  var $add = $('button[data-role="add"]');
+
+  $add.on('click', function () {
+    var product_id = $(this).data('id');
+    var quantity = $('input#quantity').val();
+
+    console.log(product_id, quantity);
+
+    $.ajax({
+      type: 'GET',
+      url: '/cart/add/' + product_id + '?quantity=' + quantity,
+      success: function (data, status) {
+        window.location = '/product/' + product_id;
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+
+  var $preview = $('img.preview');
+  var $thumbnail = $('#thumbnail');
+
+  $preview.on('click', function () {
+    $thumbnail.attr('src', $(this).attr('src'));
+    $thumbnail.parent().attr('href', $(this).attr('src'));
+  });
+});
+</script>
+{% endblock %};

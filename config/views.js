@@ -38,6 +38,10 @@ module.exports.views = {
       swig.setFilter('isUndefined', function (element) {
         return typeof element == 'undefined';
       });
+      swig.setFilter('currency', function (element) {
+        return element.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return
+      });
 
       return swig.renderFile(pathName, locals, cb);
     }
