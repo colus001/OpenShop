@@ -34,6 +34,7 @@ module.exports.routes = {
 
   // '/': { view: 'index' },
   'GET /'                 : 'ProductController.list',
+  'GET /login'         : { view: 'login' },
 
   /***************************************************************************
   *                                                                          *
@@ -48,6 +49,7 @@ module.exports.routes = {
   // ADMIN
   'GET  /admin/product'   : 'AdminController.product',
   'GET  /admin/product/:id'   : 'AdminController.product',
+  'GET  /admin/order'   : 'AdminController.order',
   // '/admin': {
   //   view: 'admin',
   //   locals: {
@@ -60,6 +62,8 @@ module.exports.routes = {
   'POST /signup'      : 'UserController.create',
   'POST /reset'       : 'UserController.reset',
   'GET  /logout'      : 'UserController.logout',
+  // 'GET  /user/:email' : 'UserController.profile',
+  'GET  /profile'     : 'UserController.profile',
 
   // PRODUCT
   'GET  /product/view/:id' : 'ProductController.view',
@@ -71,6 +75,8 @@ module.exports.routes = {
   'GET  /cart/add/:id': 'CartController.add',
   'GET  /cart/clear'  : 'CartController.clear',
   'GET  /cart/buy/:id': 'CartController.buy',
+
+  'GET /checkout'     : 'CartController.checkout',
 
   // FILE & UPLOAD
 };

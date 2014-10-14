@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block title %} Complete {% endblock %}
+
+{% block head %}
+  {% parent %}
+  <!-- STYLESHEETS -->
+  <!-- SCRIPTS -->
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h2>{{ __('주문 완료') }}</h2>
+  <hr />
+
+  {{ order }}
+</div>
+
+{% endblock %}

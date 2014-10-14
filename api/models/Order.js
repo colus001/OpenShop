@@ -11,6 +11,9 @@ module.exports = {
       type: 'STRING',
       required: true
     },
+    email: {
+      type: 'EMAIL',
+    },
     phone: {
       type: 'STRING',
       required: true
@@ -23,11 +26,32 @@ module.exports = {
       type: 'STRING',
       required: true
     },
+    comment: {
+      type: 'STRING',
+    },
     products: {
-      collection: 'Product'
+      type: 'JSON'
+    },
+    price: {
+      type: 'FLOAT'
+    },
+    owner:{
+      model:'User'
+    },
+    shipping: {
+      type: 'STRING',
+      enum: [ 'PRE', 'POST' ],
+      required: true
+    },
+    payment: {
+      type: 'STRING',
+      enum: [ 'TRANSFER', 'CARD' ],
+      required: true,
     },
     status: {
-      type: 'STRING' // PREFARE / SENT / DONE / CANCEL / SOLD-OUT
+      type: 'STRING', // PREPARE / SENT / DONE / CANCEL / SOLD-OUT
+      enum: [ 'PREPARE', 'SENT', 'DONE', 'CANCEL', 'SOLD-OUT' ],
+      defaultsTo: 'PREPARE'
     }
   }
 };

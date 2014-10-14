@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+
+{% block title %} ORDER DETAIL {% endblock %}
+
+{% block head %}
+  {% parent %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>ORDER DETAIL</h1>
+  <hr />
+
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <h3>{{ name }} {% if email %}({{ email }}){% endif %}</h3>
+      <p>{{ address }} | {{ postcode }} | {{ phone }}<p>
+      <p>{{ comment }}</p>
+      <hr />
+    </div>
+
+    <div class="col-lg-12">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ __('항목') }}</th>
+            <th>{{ __('수량') }}</th>
+            <th>{{ __('가격') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in products %}
+          <a href="/product/view/{{ product.id }}">
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.price|currency }}</td>
+          </tr>
+          </a>
+          {% endfor %}
+          <tr>
+            <td colspan="2"></td>
+            <td>{{ __('합계') }}</td>
+            <td>{{ price|currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  $('[button-action="status"]').on('click', function () {
+    var product_id = $(this).parent().parent().data('id');
+
+    $.ajax({
+      type: 'PUT',
+      url: '/product/status/' + product_id,
+      success: function (data, status) {
+        alert('Deleted succesfully.');
+        window.location = '/admin/product';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+
+  // POST DELETE
+  $('[button-action="delete"]').on('click', function () {
+    if ( !confirm ('Do you really want to delete this?') ) {
+      return;
+    }
+
+    var product_id = $(this).parent().parent().data('id');
+
+    $.ajax({
+      type: 'DELETE',
+      url: '/order/' + product_id,
+      success: function (data, status) {
+        alert('Deleted succesfully.');
+        window.location = '/admin/order';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+});
+</script>
+
+
+{% endblock %}

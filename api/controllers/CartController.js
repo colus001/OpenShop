@@ -7,43 +7,51 @@
 
 module.exports = {
   index: function (req, res) {
-    if ( !req.session.hasOwnProperty('cart') )
-      req.session.cart = [];
+    var result = {
+      user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined,
+      total: 0,
+      summary: 0
+    };
 
-    var products = req.session.cart;
-    var cart = [];
+    async.waterfall([
+      function GetProduct(next) {
+        if ( !req.session.hasOwnProperty('cart') )
+          req.session.cart = [];
 
-    async.map(products, function (element, done) {
-      Product.findOne(element.id, function (err, product) {
-        if (err) done (err);
-        if (!product)
-          req.session.cart.splice(products.indexOf(element), 1);
+        var products = req.session.cart;
+        var cart = [];
 
-        var prodcutInfo = {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: element.quantity
-        };
+        async.map(products, function (item, done) {
+          Product.findOne(item.id, function (err, product) {
+            if (err) done (err);
+            if (!product)
+              req.session.cart.splice(products.indexOf(item), 1);
 
-        cart.push(prodcutInfo);
-        done(null, product);
-      });
-    }, function (err) {
-      if (err) return res.serverError(err);
+            var prodcutInfo = {
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              quantity: item.quantity
+            };
 
-      var result = {
-        total: 0,
-        summary: 0,
-        cart: cart
-      };
+            cart.push(prodcutInfo);
+            done(null, product);
+          });
+        }, function (err) {
+          if (err) return res.serverError(err);
 
-      for ( var i in cart ) {
-        result.summary += cart[i].price * cart[i].quantity;
-        result.total += cart[i].quantity;
+          result.cart = cart;
+
+          for ( var i in cart ) {
+            result.summary += cart[i].price * cart[i].quantity;
+            result.total += cart[i].quantity;
+          }
+
+          next(null, result);
+          return;
+        });
       }
-      var view;
-
+    ], function (err, result) {
       return res.view('cart.html', result);
     });
   },
@@ -91,8 +99,58 @@ module.exports = {
     });
   },
 
-  check: function (req, res) {
+  checkout: function (req, res) {
+    var result = {
+      total: 0,
+      summary: 0,
+      user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined
+    };
 
+    async.waterfall([
+      function GetCart (next) {
+        if ( !req.session.hasOwnProperty('cart') || req.session.cart.length <= 0 ) {
+          next('NO_PRODUCT_IN_CART');
+          return;
+        }
+
+        var products = req.session.cart;
+        var cart = [];
+
+        async.map(products, function (item, done) {
+          Product.findOne(item.id, function (err, product) {
+            if (err) done (err);
+            if (!product) done ('NO_PRODUCT_FOUND');
+            if (product.stock === 0 || ( product.stock !== -1 && product.stock - item.quantity <= 0 )) done('SOLD_OUT');
+
+            var prodcutInfo = {
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              quantity: item.quantity
+            };
+
+            cart.push(prodcutInfo);
+            done(null, product);
+          });
+        }, function (err) {
+          if (err) return res.serverError(err);
+
+          result.cart = cart;
+
+          for ( var i in cart ) {
+            result.summary += cart[i].price * cart[i].quantity;
+            result.total += cart[i].quantity;
+          }
+
+          next(null, result);
+          return;
+        });
+      }
+    ], function (err, result) {
+      if (err) return res.serverError(err);
+
+      return res.view('checkout.html', result);
+    });
   },
 
   // Disable default RESTful blueprint routes

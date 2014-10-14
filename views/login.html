@@ -1,0 +1,91 @@
+{% extends 'layout.html' %}
+
+{% block title %} {{ __('로그인') }} {% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container" width="">
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="row" id="login-window">
+        <h3>{{ __('로그인') }}</h3>
+        <form role="form" action='/login' method="POST">
+          <div class="form-group">
+            <label for="email">{{ __('이메일') }}</label>
+            <div class="input-group">
+              <div class="input-group-addon">@</div>
+              <input type="email" class="form-control" id="email" name="email" placeholder="client@FLIT.kr" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">{{ __('비밀번호') }}</label>
+            <div class="input-group">
+              <div class="input-group-addon">?</div>
+              <input type="password" class="form-control" id="password" name="password" />
+            </div>
+          </div>
+          <hr />
+
+          <button type="submit" class="btn btn-primary pull-right">{{ __('로그인') }}</button>
+          <button type="button" id="signup" class="btn btn-default">{{ __('회원가입 하기') }}</button>
+        </form>
+      </div><!-- LOGIN FORM -->
+
+      <div class="row" id="signup-window" style="display: none;">
+        <h3>{{ __('회원가입') }}</h3>
+        <form role="form" action='/signup' method="POST">
+          <div class="form-group">
+            <label for="name">{{ __('이름') }}</label>
+            <div class="input-group">
+              <div class="input-group-addon">@</div>
+              <input type="name" class="form-control" id="name" name="name" placeholder="{{ __('이름') }}" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">{{ __('이메일') }}</label>
+            <div class="input-group">
+              <div class="input-group-addon">@</div>
+              <input type="email" class="form-control" id="email" name="email" placeholder="client@FLIT.kr" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password">{{ __('비밀번호') }}</label>
+            <div class="input-group">
+              <div class="input-group-addon">?</div>
+              <input type="password" class="form-control" id="password" name="password" />
+            </div>
+          </div>
+          <hr />
+
+          <button type="submit" class="btn btn-primary pull-right">{{ __('회원가입') }}</button>
+          <button type="button" id="login" class="btn btn-default">{{ __('로그인 하기') }}</button>
+        </form>
+      </div><!-- LOGIN FORM -->
+    </div>
+  </div>
+
+</div><!-- /.container -->
+
+<script>
+  $(document).ready(function () {
+    var $signup = $('button#signup');
+    var $login = $('button#login');
+
+    $signup.on('click', function () {
+      $('#login-window').hide();
+      $('#signup-window').show();
+    });
+
+    $login.on('click', function () {
+      $('#signup-window').hide();
+      $('#login-window').show();
+    });
+  });
+</script>
+
+{% endblock %};

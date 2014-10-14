@@ -1,0 +1,183 @@
+{% extends 'layout.html' %}
+
+{% block title %} Checking out... {% endblock %}
+
+{% block head %}
+  {% parent %}
+  <!-- STYLESHEETS -->
+  <!-- SCRIPTS -->
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h2>{{ __('주문 확인') }} <a href="/cart" class="btn btn-warning pull-right">{{ __('변경') }}</a></h2>
+  <hr />
+
+  {% if cart.length <= 0 %}
+  <h2>{{ __('현재 장바구니가 비어있습니다') }}</h2>
+  {% else %}
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>{{ __('이름') }}</th>
+            <th>{{ __('가격') }}</th>
+            <th>{{ __('수량') }}</th>
+            <th>{{ __('합계') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for product in cart %}
+          <tr data-id="{{ product.id }}">
+            <td>{{ loop.index }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ sails.config.project.currency.symbol }}{{ product.price|currency }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ sails.config.project.currency.symbol }}{{ (product.price * product.quantity)|currency }}</td>
+          </tr>
+          {% endfor %}
+
+          <tr>
+            <td colspan="2"></td>
+            <td>{{ __('합계') }}</td>
+            <td>{{ total }}</td>
+            <td>{{ sails.config.project.currency.symbol }}{{ summary|currency }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>{{ __('배송 정보 입력') }}</h2>
+      <hr />
+
+      <form role="form" action="/order" method="POST">
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="form-group">
+              <label for="name">{{ __('받으시는 분') }}</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('받으시는 분의 성함을 입력하세요') }}" value="{{ user.name }}">
+            </div>
+            <div class="form-group">
+              <label for="phone">{{ __('전화번호') }}</label>
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ __('연락받으실 전화번호를 입력하세요') }}" value="{{ user.phone }}">
+            </div>
+            {% if !user %}
+            <div class="form-group">
+              <label for="email">{{ __('이메일') }}</label>
+              <input type="text" class="form-control" id="email" name="email" placeholder="{{ __('연락받으실 전화번호를 입력하세요') }}" value="{{ user.email }}">
+            </div>
+            {% endif %}
+            {% if user %}
+            <div class="form-group" style="margin-left: 15px;">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="remember" checked> {{ __('이 주소를 기본 배송지로 저장합니다') }}
+                </label>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="col-sm-8">
+            <div class="form-group">
+              <label for="address">{{ __('주소') }}</label>
+              <input type="text" class="form-control" id="address" name="address" placeholder="{{ __('주소를 입력하세요') }}" value="{{ user.address }}">
+            </div>
+            <div class="form-group">
+              <label for="postcode">{{ __('우편번호') }}</label>
+              <input type="text" class="form-control" id="postcode" name="postcode" placeholder="{{ __('우편번호를 입력하세요') }}" value="{{ user.postcode }}">
+            </div>
+            <div class="form-group">
+              <label for="comment">{{ __('배송시 주의사항') }}</label>
+              <textarea class="form-control" name="comment" id="comment" cols="30" rows="3" placeholder="{{ __('이 제품에 대한 설명을 MARKDOWN 형식으로 입력하세요') }}"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <h2>{{ __('배송 방법') }}</h2>
+        <hr />
+
+        <div class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-2">
+              <select class="form-control" name="shipping">
+                <option value="PRE">{{ __('선불 택배') }}</option>
+                <option value="POST">{{ __('후불 택배') }}</option>
+              </select>
+            </div>
+            <label id="shipping" class="control-label">{{ __('선불 택배시 자동으로 3,000원의 배송비가 추가됩니다.') }}</label>
+          </div>
+        </div>
+
+        <h2>{{ __('결제 방법') }}</h2>
+        <hr />
+
+        <div class="form-horizontal">
+          <div class="form-group">
+            <div class="col-sm-2">
+              <select class="form-control" name="payment">
+                <option value="TRANSFER">{{ __('계좌 이체') }}</option>
+              </select>
+            </div>
+            <label id="payment" class="control-label">우리은행 1005-102-532536 김석준</label>
+          </div>
+          <p class="help-block">{{ __('현재 계좌 이체를 제외한 결제 방법은 지원하지 않고 있으니 양해 부탁드립니다.') }}</p>
+        </div>
+        <hr />
+
+        <button type="submit" class="btn btn-info btn-lg">{{ __('주문') }}</button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  $('[button-action="apply"]').on('click', function () {
+    var product_id = $(this).parent().parent().data('id');
+    var quantity = $(this).parent().parent().find('input').val();
+
+    $.ajax({
+      type: 'PUT',
+      url: '/cart/apply/' + product_id + '?quantity=' + quantity,
+      success: function (data, status) {
+        window.location = '/cart';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+
+  // POST DELETE
+  $('[button-action="delete"]').on('click', function () {
+    if ( !confirm ('Do you really want to delete this?') ) {
+      return;
+    }
+
+    var product_id = $(this).parent().parent().data('id');
+
+    $.ajax({
+      type: 'DELETE',
+      url: '/product/' + product_id,
+      success: function (data, status) {
+        alert('Deleted succesfully.');
+        window.location = '/admin/product';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+});
+</script>
+
+
+{% endblock %}

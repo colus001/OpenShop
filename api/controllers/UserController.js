@@ -7,11 +7,38 @@
 var bcrypt = require('bcrypt');
 
 module.exports = {
+  profile: function (req, res) {
+    User.findOne(req.session.user.id).populate('orders', { sort: 'createdAt DESC'}).exec(function (err, user) {
+      if (err) return res.serverError (err);
+      if (!user) return res.serverError ('NO_USER_FOUND');
+
+      var result = {
+        result: 'success',
+        user: user,
+        orders: user.orders
+      };
+
+      return res.view('profile.html', result);
+    });
+  },
+
 	create: function (req, res) {
     User.create(req.body, function (err, user) {
       if (err) return next(err);
 
       return res.redirect('/');
+    });
+  },
+
+  update: function (req, res) {
+    delete req.body.email;
+
+    console.log(req.body);
+
+    User.update(req.params.id, req.body, function (err, user) {
+      if (err) return res.serverError (err);
+
+      return res.redirect('/profile');
     });
   },
 
@@ -32,7 +59,7 @@ module.exports = {
 
           if ( isSuccess ) {
             req.session.authenticated = true;
-            req.session.user_id = user.id;
+            req.session.user = user;
           }
 
           next(null, user, isSuccess);
@@ -91,10 +118,10 @@ module.exports = {
   },
 
   logout: function (req, res) {
-    req.session.user_id = undefined;
     req.session.authenticated = false;
+    req.session.user = undefined;
 
-    return res.redirect('/intro');
+    return res.redirect('/');
   },
 };
 

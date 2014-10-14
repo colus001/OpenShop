@@ -5,6 +5,8 @@
 * @docs        :: http://sailsjs.org/#!documentation/models
 */
 
+var bcrypt = require('bcrypt');
+
 module.exports = {
   attributes: {
     name: {
@@ -19,7 +21,7 @@ module.exports = {
       type: 'STRING',
       required: true
     },
-    mobile: {
+    phone: {
       type: 'STRING'
     },
     address: {
@@ -28,8 +30,13 @@ module.exports = {
     postcode: {
       type: 'STRING'
     },
+    orders: {
+      collection: 'Order',
+      via: 'owner'
+    },
     permission: {
-      type: 'STRING', // ADMIN, CUSTOMER
+      type: 'STRING',
+      enum: [ 'ADMIN', 'CUSTOMER' ],
       defaultsTo: 'CUSTOMER'
     }
   },

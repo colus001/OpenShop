@@ -8,7 +8,6 @@
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="/" style="color: white;">{{ sails.config.project.name }}</a>
-      <button type="button" class="btn btn-default visible-xs" data-toggle="offcanvas" style="margin-top: 10px;">LIST</button>
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -25,23 +24,18 @@
         </li>
         <li class="dropdown">
           {% if !user %}
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+          <a href="/login">
             {{ __('로그인') }}
           </a>
           {% else %}
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            {% if user.name %} {{ name }} {% else %} {{ user.email }} {% endif %} <i class="fa fa-fw fa-lg fa-cog"></i>
-            <strong class="caret"></strong>
+            {% if user.name %} {{ user.name }} {% else %} {{ user.email }} {% endif %} <i class="fa fa-fw fa-lg fa-cog"></i><strong class="caret"></strong>
           </a>
-          <ul class="dropdown-menu">
-            <li>
-              <a href="#" id="edit-profile">{{ __('프로필 수정') }}</a>
-            </li>
-            <li class="divider">
-            </li>
-            <li>
-              <a href="/logout">{{ __('로그아웃') }}</a>
-            </li>
+          <ul class="dropdown-menu" role="menu">
+            <li class="dropdown-header">{{ __('사용자 메뉴') }}</li>
+            <li><a href="/profile" id="edit-profile">{{ __('마이 페이지') }}</a></li>
+            <li class="divider"></li>
+            <li><a href="/logout">{{ __('로그아웃') }}</a></li>
           </ul>
           {% endif %}
         </li>

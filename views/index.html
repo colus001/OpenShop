@@ -21,7 +21,7 @@
 
 {% block content %}
 
-<div class="container documents" width="100%">
+<div class="container" width="100%">
   {% for product in products %}
   {% if loop.index == 0 || loop.index%4 == 0 %}
   <div class="row"><!-- PRODUCT -->
@@ -48,9 +48,10 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
-  var add = $('button[data-role="add"]');
+  var $add = $('button[data-role="add"]');
+  // var $buy = $('button[data-role="buy"]')
 
-  add.on('click', function () {
+  $add.on('click', function () {
     var product_id = $(this).data('id');
     var quantity = $(this).parent().find('input').val();
 
@@ -67,6 +68,24 @@ $(document).ready(function () {
       }
     });
   });
+
+  // $buy.on('click', function () {
+  //   var product_id = $(this).data('id');
+  //   var quantity = $(this).parent().find('input').val();
+
+  //   $.ajax({
+  //     type: 'GET',
+  //     url: '/cart/add/' + product_id + '?quantity=' + quantity,
+  //     success: function (data, status) {
+  //       window.location = '/';
+  //       return;
+  //     },
+  //     error: function (error) {
+  //       console.log(error);
+  //       return;
+  //     }
+  //   });
+  // });
 });
 </script>
 {% endblock %};

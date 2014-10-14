@@ -7,36 +7,35 @@
 
 module.exports = {
   view: function (req, res) {
-    Product.findOne(req.params.id, function (err, product) {
-      if (err) return res.serverError(err);
-      if (!product) return res.serverError('NO_PRODUCT_FOUND');
+    var result = {
+      user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined
+    };
 
-      var result = {
-        cart: req.session.cart,
-        product: product
+    async.waterfall([
+      function GetProduct (next)  {
+        Product.findOne(req.params.id, function (err, product) {
+          if (err) return res.serverError(err);
+          if (!product) return res.serverError('NO_PRODUCT_FOUND');
+
+          result.cart = req.session.cart;
+          result.product = product;
+
+          return next(null, result);
+        });
       }
+    ], function (err, result) {
+      if (err) res.serverError (err);
 
       return res.view('product.html', result);
     });
   },
 
   list: function (req, res) {
-    var result = {};
+    var result = {
+      user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined
+    };
 
     async.waterfall([
-      function GetCurrentUser (next) {
-        if ( req.session.user_id == undefined )
-          return next(null);
-
-        User.findOne({ 'id': req.session.user_id }, function (err, user) {
-          if (err) next(err);
-
-          result.user = user;
-
-          return next(null);
-        });
-      },
-
       function GetProductList (next) {
         Product.find({ isSelling: true }, function (err, products) {
           if (err) next(err);
