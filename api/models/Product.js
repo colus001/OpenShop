@@ -72,7 +72,7 @@ module.exports = {
       var tagsArray = values.tags[0].split(',');
 
       for ( var j in tagsArray )
-        tagsValue.push(tagsArray[j].trim());
+        tagsValue.push(tagsArray[j].trim().toUpperCase());
 
       values.tags = tagsValue;
     }
