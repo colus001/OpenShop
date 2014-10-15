@@ -58,12 +58,9 @@ module.exports = {
           if (err) return next(err);
 
           if ( isSuccess ) {
-            console.log('adding');
             req.session.authenticated = true;
             req.session.user = user;
           }
-
-          console.log(isSuccess, req.session);
 
           return next(null, isSuccess);
         });
