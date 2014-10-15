@@ -51,6 +51,10 @@ module.exports = {
   beforeValidate: function (values, callback) {
     console.log('values:', values);
 
+    if ( isNaN(values.stock) ) {
+      values.stock = -1;
+    }
+
     if ( values.photos ) {
       var photosValue = [];
       var photoArray = values.photos[0].split(',');
