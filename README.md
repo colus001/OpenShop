@@ -9,8 +9,8 @@ System Dependencies
 
 How To Run
 
-  sudo npm install
-  node app.js
+  'sudo npm install
+  'node app.js
 
 
 ========
