@@ -62,6 +62,9 @@ module.exports = {
             req.session.user = user;
           }
 
+          console.log(user);
+          console.log(req.session);
+
           return next(null, isSuccess);
         });
       }
