@@ -75,6 +75,11 @@
 
       <h4>{{ __('설명') }}</h4>
       <p>{{ product.description|replace('\n', '<br />', 'g')|safe }}</p>
+
+      {% for tag in product.tags %}
+      <a href="/tag/{{ tag }}"><span class="badge badge-info">{{ tag }}</span></a>
+      <!-- <a href="#"><span class="badge badge-info">{{ tag }}</span></a> -->
+      {% endfor %}
     </div>
   </div>
 </div><!-- /.container -->

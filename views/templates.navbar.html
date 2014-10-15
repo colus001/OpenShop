@@ -22,12 +22,18 @@
         <li>
           <a href="/cart"><i class="fa fa-fw fa-shopping-cart"></i> {{ __('장바구니') }} &nbsp; <span class="badge badge-default">{{ cart.length }}</span></a>
         </li>
+        {% if admin %}
         <li class="dropdown">
-          {% if !user %}
+          <a href="/admin">{{ __('관리자') }}</a>
+        </li>
+        {% endif %}
+        <li class="dropdown">
+          {% if !user && !admin %}
           <a href="/login">
             {{ __('로그인') }}
           </a>
-          {% else %}
+          {% endif %}
+          {% if user %}
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             {% if user.name %} {{ user.name }} {% else %} {{ user.email }} {% endif %} <i class="fa fa-fw fa-lg fa-cog"></i><strong class="caret"></strong>
           </a>

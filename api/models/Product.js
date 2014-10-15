@@ -49,8 +49,6 @@ module.exports = {
   },
 
   beforeValidate: function (values, callback) {
-    console.log('values:', values);
-
     if ( isNaN(values.stock) ) {
       values.stock = -1;
     }
@@ -61,8 +59,6 @@ module.exports = {
 
       for ( var i in photoArray )
         photosValue.push(photoArray[i].trim());
-
-      console.log('photoArray:', photoArray);
 
       values.photos = photosValue;
     }

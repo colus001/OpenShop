@@ -6,8 +6,18 @@
  */
 
 module.exports = {
+  index: function (req, res) {
+    var result = {
+      admin: req.session.user
+    };
+
+    return res.view('admin.html', result);
+  },
+
 	product: function (req, res) {
-    var result = {};
+    var result = {
+      admin: req.session.user
+    };
     var skip = 0;
     var page = 1;
 
@@ -71,7 +81,9 @@ module.exports = {
   },
 
   order: function (req, res) {
-    var result = {};
+    var result = {
+      admin: req.session.user
+    };
     var skip = 0;
     var page = 1;
 
@@ -135,7 +147,9 @@ module.exports = {
   },
 
   user: function (req, res) {
-    var result = {};
+    var result = {
+      admin: req.session.user
+    };
     var skip = 0;
     var page = 1;
 

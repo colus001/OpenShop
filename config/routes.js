@@ -32,8 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  'GET /'                 : 'ProductController.list',
-  'GET /login'         : { view: 'login' },
+  // INDEX
+  'GET    /'                    : 'ProductController.list',
+  'GET    /login'               : { view: 'login' },
 
   /***************************************************************************
   *                                                                          *
@@ -46,38 +47,31 @@ module.exports.routes = {
   ***************************************************************************/
 
   // ADMIN
-  'GET  /admin'               : { view: 'admin' },
-  'GET  /admin/product'       : 'AdminController.product',
-  'GET  /admin/product/:id'   : 'AdminController.product',
-  'GET  /admin/order'         : 'AdminController.order',
-  'GET  /admin/user'          : 'AdminController.user',
-  // '/admin': {
-  //   view: 'admin',
-  //   locals: {
-  //     layout: 'products'
-  //   }
-  // },
+  'GET    /admin'               : 'AdminController.index',
+  'GET    /admin/product'       : 'AdminController.product',
+  'GET    /admin/product/:id'   : 'AdminController.product',
+  'GET    /admin/order'         : 'AdminController.order',
+  'GET    /admin/user'          : 'AdminController.user',
 
   // USER
-  'POST /login'       : 'UserController.login',
-  'POST /signup'      : 'UserController.create',
-  'POST /reset'       : 'UserController.reset',
-  'GET  /logout'      : 'UserController.logout',
-  // 'GET  /user/:email' : 'UserController.profile',
-  'GET  /profile'     : 'UserController.profile',
+  'POST   /login'               : 'UserController.login',
+  'POST   /signup'              : 'UserController.create',
+  'POST   /reset'               : 'UserController.reset',
+  'GET    /logout'              : 'UserController.logout',
+  'GET    /profile'             : 'UserController.profile',
 
   // PRODUCT
-  'GET  /product/view/:id' : 'ProductController.view',
-  'GET  /product/status/:id': 'ProductController.status',
+  'GET    /product/view/:id'    : 'ProductController.view',
+  'GET    /product/status/:id'  : 'ProductController.status',
 
   // ORDER & CART
-  'GET  /cart'            : 'CartController.index',
-  'PUT  /cart/apply/:id'  : 'CartController.apply',
-  'GET  /cart/add/:id'    : 'CartController.add',
-  'GET  /cart/buy/:id'    : 'CartController.add',
-  'GET  /cart/clear'      : 'CartController.clear',
-  'DELETE /cart/:id'      : 'CartController.delete',
-  'GET /checkout'         : 'CartController.checkout',
+  'GET    /cart'                : 'CartController.index',
+  'PUT    /cart/apply/:id'      : 'CartController.apply',
+  'GET    /cart/add/:id'        : 'CartController.add',
+  'GET    /cart/buy/:id'        : 'CartController.add',
+  'GET    /cart/clear'          : 'CartController.clear',
+  'DELETE /cart/:id'            : 'CartController.delete',
+  'GET    /checkout'            : 'CartController.checkout',
 
   // FILE & UPLOAD
 };
