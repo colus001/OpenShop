@@ -58,6 +58,13 @@
   "날짜": "Date",
   "프로필": "Your Profile",
   "배송비 포함": "Shipping fee included",
+  "주문": "Order",
+  "권한": "Permission",
+  "관리자": "Admin",
+  "고객": "Customer",
+
+  "수정하기": "Save",
+  "등록하기": "Register",
 
   "이 주소를 기본 배송지로 저장합니다": "Remember this as default address",
   "현재 계좌 이체를 제외한 결제 방법은 지원하지 않고 있으니 양해 부탁드립니다.": "Currently, we only support account-to-account transfer as payment method. Sorry for your inconvenience.",
