@@ -126,7 +126,7 @@
               <a href="{{ product.photos }}">{{ loop.index }}</a>&nbsp;
               {% endfor %}
             </td>
-            <td>{{ product.price }}</td>
+            <td>{{ product.price|currency }}</td>
             <td>
               {% if product.stock > 0 %}
               {{ product.stock }}
