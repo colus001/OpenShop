@@ -4,7 +4,7 @@ module.exports.project = {
   name: 'SHOP',
   author: 'WASD Inc.',
   description: 'OPEN SHOP for FLIT electronics.',
-  version: '0.0.1',
+  version: '0.1.0',
   year: new Date().getFullYear(),
   currency: {
     position: 'FRONT', // FRONT / END
