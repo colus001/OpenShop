@@ -47,24 +47,22 @@ module.exports = {
     async.waterfall([
       function GetUser (next) {
         User.findOne({ 'email': req.body.email }).exec(function (err, user) {
-          if (err) next(err);
+          if (err) return next(err);
 
-          next(null, user);
-          return;
+          return next(null, user);
         });
       },
 
       function Validate (user, next) {
         bcrypt.compare(req.body.password, user.password, function(err, isSuccess) {
-          if (err) next(err);
+          if (err) return next(err);
 
           if ( isSuccess ) {
             req.session.authenticated = true;
             req.session.user = user;
           }
 
-          next(null, user, isSuccess);
-          return;
+          return next(null, isSuccess);
         });
       }
     ], function (err, isSuccess) {
@@ -79,19 +77,17 @@ module.exports = {
     async.waterfall([
       function GetUser (next) {
         User.findOne({ 'email': req.body.email }).exec(function (err, user) {
-          if (err) next(err);
+          if (err) return next(err);
 
-          next(null, user);
-          return;
+          return next(null, user);
         });
       },
 
       function GenSalt (user, next) {
         bcrypt.genSalt(10, function(err, salt) {
-          if (err) next(err);
+          if (err) return next(err);
 
-          next(null, user, salt);
-          return;
+          return next(null, user, salt);
         });
       },
 
@@ -99,13 +95,12 @@ module.exports = {
         var randomPassword = randomString(10);
 
         bcrypt.hash(randomPassword, salt, function (err, hash) {
-          if (err) next(err);
+          if (err) return next(err);
 
           user.update({ password: hash }, function (err, updatedUser) {
             updatedUser.newPassword = randomPassword;
 
-            next(null, updatedUser);
-            return;
+            return next(null, updatedUser);
           });
         });
       },
