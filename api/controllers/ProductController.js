@@ -54,6 +54,8 @@ module.exports = {
       user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined
     };
 
+    console.log('USER:', req.session.user);
+
     async.waterfall([
       function GetProductList (next) {
         Product.find({ isSelling: true }, function (err, products) {
