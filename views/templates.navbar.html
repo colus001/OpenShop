@@ -33,6 +33,9 @@
           </a>
           <ul class="dropdown-menu" role="menu">
             <li class="dropdown-header">{{ __('사용자 메뉴') }}</li>
+            {% if user.permission == 'ADMIN' %}
+            <li><a href="/admin">{{ __('관리자 페이지') }}</a></li>
+            {% endif %}
             <li><a href="/profile" id="edit-profile">{{ __('마이 페이지') }}</a></li>
             <li class="divider"></li>
             <li><a href="/logout">{{ __('로그아웃') }}</a></li>
