@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="container">
-  <h1>ORDER MANAGER</h1>
+  <a href="/admin"><h1>ORDER MANAGER</h1></a>
   <hr />
 
   <div class="row clearfix">
@@ -52,7 +52,7 @@
             <td>{{ order.phone }}</td>
             <td>{{ order.address }}</td>
             <td>
-              {% if order.shipping == 'PRE' %}
+              {% if order.shipping > 0 %}
               <span class="badge badge-success">{{ __('선불') }}</span>
               {% else %}
               <span class="badge badge-warning">{{ __('후불') }}</span>
@@ -80,30 +80,24 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <div style="text-align: center;">
+        <ul class="pagination">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
 
 <script type="text/javascript">
 $(document).ready(function () {
-  $('[button-action="status"]').on('click', function () {
-    var product_id = $(this).parent().parent().data('id');
-
-    $.ajax({
-      type: 'PUT',
-      url: '/product/status/' + product_id,
-      success: function (data, status) {
-        alert('Deleted succesfully.');
-        window.location = '/admin/product';
-        return;
-      },
-      error: function (error) {
-        console.log(error);
-        return;
-      }
-    });
-  });
-
   // POST DELETE
   $('[button-action="delete"]').on('click', function () {
     if ( !confirm ('Do you really want to delete this?') ) {

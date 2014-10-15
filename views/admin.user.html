@@ -1,0 +1,102 @@
+ {% extends 'layout.html' %}
+
+{% block title %} USER MANAGER {% endblock %}
+
+{% block head %}
+  {% parent %}
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <a href="/admin"><h1>USER MANAGER</h1></a>
+  <hr />
+
+  <div class="row clearfix">
+    <div class="col-lg-12">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>{{ __('생성일') }}</th>
+            <th>{{ __('이름') }}</th>
+            <th>{{ __('이메일') }}</th>
+            <th>{{ __('전화번호') }}</th>
+            <th>{{ __('주소') }}</th>
+            <th>{{ __('주문') }}</th>
+            <th>{{ __('권한') }}</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr data-id="{{ order.id }}">
+            <td>{{ loop.index }}</td>
+            <td>{{ user.createdAt|date('Y-m-d', '-540') }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.address }}</td>
+            <td>{{ user.orders.length }}</td>
+            <td>
+              {% if user.permission == 'ADMIN' %}
+              <span class="badge badge-primary">{{ __('관리자') }}</span>
+              {% elseif user.permission == 'CUSTOMER' %}
+              <span class="badge badge-success">{{ __('고객') }}</span>
+              {% else %}
+              <span class="badge badge-warning">{{ __('알수없음') }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="/user/{{ user.id }}" class="btn btn-xs btn-default">RAW</a>
+              <button class="btn btn-xs btn-danger" button-action="delete">DELETE</button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div style="text-align: center;">
+        <ul class="pagination">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  // POST DELETE
+  $('[button-action="delete"]').on('click', function () {
+    if ( !confirm ('Do you really want to delete this?') ) {
+      return;
+    }
+
+    var user_id = $(this).parent().parent().data('id');
+
+    $.ajax({
+      type: 'DELETE',
+      url: '/user/' + user_id,
+      success: function (data, status) {
+        alert('Deleted succesfully.');
+        window.location = '/admin/order';
+        return;
+      },
+      error: function (error) {
+        console.log(error);
+        return;
+      }
+    });
+  });
+});
+</script>
+
+
+{% endblock %}

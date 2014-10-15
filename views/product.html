@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 
-{% block title %} {{ name }} {% endblock %}
+{% block title %} {{ product.name }} {% endblock %}
 
 {% block head %}
 <style>
@@ -62,7 +62,7 @@
       </h3>
       <hr>
 
-      <h4>{{ sails.config.project.currency.symbol }}{{ product.price|currency }}</h4>
+      <h3>{{ sails.config.project.currency.symbol }}{{ product.price|currency }}</h3>
       <hr>
 
       <div class="form-group form-inline">
@@ -74,7 +74,7 @@
       <hr>
 
       <h4>{{ __('설명') }}</h4>
-      <div>{{ product.description }}</div>
+      <p>{{ product.description|replace('\n', '<br />', 'g')|safe }}</p>
     </div>
   </div>
 </div><!-- /.container -->

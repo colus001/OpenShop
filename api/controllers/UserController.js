@@ -15,6 +15,7 @@ module.exports = {
       var result = {
         result: 'success',
         user: user,
+        cart: req.session.cart,
         orders: user.orders
       };
 

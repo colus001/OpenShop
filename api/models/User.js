@@ -43,22 +43,31 @@ module.exports = {
 
   beforeCreate: function (values, callback) {
     async.waterfall([
-      function genSalt (next) {
+      function GenSalt (next) {
         bcrypt.genSalt(10, function(err, salt) {
-          if (err) next(err);
+          if (err) return next(err);
 
-          next(null, salt);
-          return;
+          return next(null, salt);
         });
       },
 
-      function encrypt (salt, next) {
+      function Encrypt (salt, next) {
         bcrypt.hash(values.password, salt, function (err, hash) {
-          if (err) next(err);
+          if (err) return next (err);
           values.password = hash;
 
-          next(null);
-          return;
+          return next(null);
+        });
+      },
+
+      function PutAdminPermission (next) {
+        User.find({}, function (err, users) {
+          if (err) return next (err);
+
+          if ( users.length === 0 )
+            values.permission = 'ADMIN';
+
+          return next(null);
         });
       }
     ], function (err, result) {

@@ -1,163 +1,25 @@
 {% extends 'layout.html' %}
 
-{% block title %} PRODUCT MANAGER {% endblock %}
+{% block title %} ADMIN PANEL {% endblock %}
 
 {% block head %}
   {% parent %}
-  <!-- STYLESHEETS -->
 
-  <!-- SCRIPTS -->
 {% endblock %}
 
 {% block content %}
-<div class="col-lg-12">
-  <h1>PRODUCT MANAGER</h1>
-
+<div class="container">
+  <h1>ADMIN PANEL</h1>
   <hr />
 
-  <form role="form" action="/product" method="POST">
-    <div class="row clearfix">
-      <div class="col-lg-6">
-        <div class="form-group">
-          <label for="name">{{ __('이름') }}</label>
-          <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('제품명을 입력하세요') }}">
-        </div>
-        <div class="form-group">
-          <label for="price">{{ __('가격') }}</label>
-          <input type="text" class="form-control" id="price" name="price" placeholder="{{ __('가격을 입력하세요') }}">
-        </div>
-        <div class="form-group">
-          <label for="stock">{{ __('재고') }}</label>
-          <input type="text" class="form-control" id="stock" name="stock" placeholder="{{ __('재고를 입력하세요') }}">
-        </div>
-      </div>
-
-      <div class="col-lg-6">
-        <div class="form-group">
-          <label for="photo">{{ __('사진') }}</label>
-          <input type="text" class="form-control" id="photo" name="photo" placeholder="{{ __('제품명을 입력하세요') }}">
-        </div>
-        <div class="form-group">
-          <label for="name">{{ __('관련 제품') }}</label>
-          <select name="related" class="form-control">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="tags">{{ __('태그') }}</label>
-          <input type="text" class="form-control" id="tags" name="tags" placeholder="{{ __('콤마로 구분되는 태그를 입력하세요') }}">
-        </div>
-      </div>
-    </div>
-    <div class="row clearfix">
-      <div class="col-lg-12">
-        <div class="form-group">
-          <label for="description">{{ __('설명') }}</label>
-          <textarea class="form-control" name="description" id="description" cols="30" rows="10" placeholder="{{ __('이 제품에 대한 설명을 MARKDOWN 형식으로 입력하세요') }}"></textarea>
-          <!-- <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('제품명을 입력하세요') }}"> -->
-        </div>
-        <div class="checkbox">
-          <button type="submit" class="btn btn-default pull-right">Submit</button>
-          <div class="icheckbox_flat checked" style="position: relative;"><input type="checkbox" id="flat-checkbox-1" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background-color: rgb(255, 255, 255); border: 0px; opacity: 0; background-position: initial initial; background-repeat: initial initial;">
-            <ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background-color: rgb(255, 255, 255); border: 0px; opacity: 0; background-position: initial initial; background-repeat: initial initial;"></ins>
-          </div>
-          <label for="flat-checkbox-1" class="">{{ __('판매') }}</label>
-        </div>
-      </div>
-    </div>
-  </form>
-
-  <hr />
-
-  <div class="row clearfix">
-    <div class="col-lg-12">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>{{ __('생성일') }}</th>
-            <th>{{ __('이름') }}</th>
-            <th>{{ __('사진') }}</th>
-            <th>{{ __('가격') }}</th>
-            <th>{{ __('재고') }}</th>
-            <th>{{ __('관련 제품') }}</th>
-            <th>{{ __('태그') }}</th>
-            <th colspan="2"></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for product in products %}
-          <tr data-id="{{ product.id }}">
-            <td>{{ loop.index }}</td>
-            <td>{{ product.createdAt }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.photos }}</td>
-            <td>{{ product.price }}</td>
-            <td>
-              {% if product.stock > 0 %}
-              {{ __('재고') }}: {{ product.stock }}
-              {% elseif product.stock == 0 %}
-              {{ __('재고없음') }}
-              {% else %}
-              {{ __('확인불가') }}
-              {% endif %}
-            </td>
-            <td>{{ product.related }}</td>
-            <td>
-              {% for tag in product.tags %}
-              {{ tag }},
-              {% endfor %}
-            </td>
-            <td>
-              {% if product.isSelling %}
-              <button class="btn btn-xs btn-primary">{{ __('판매중') }}</button>
-              {% else %}
-              <button class="btn btn-xs btn-warning">{{ __('판매중지') }}</button>
-              {% endif %}
-            </td>
-            <td>
-              <button class="btn btn-xs btn-primary" button-action="edit">EDIT</button>
-              <button class="btn btn-xs btn-danger" button-action="delete">DELETE</button>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <p>
+    <a href="/admin/user">USER MANAGER</a>
+  </p>
+  <p>
+    <a href="/admin/product">PRODUCT MANAGER</a>
+  </p>
+  <p>
+    <a href="/admin/order">ORDER MANAGER</a>
+  </p>
 </div>
-
-<script type="text/javascript">
-$(document).ready(function() {
-  // POST DELETE
-  $('[button-action="delete"]').on('click', function () {
-    if ( !confirm ('Do you really want to delete this?') ) {
-      return;
-    }
-
-    var category_id = $(this).parent().parent().data('id');
-
-    $.ajax({
-      type: 'POST',
-      url: '/category/delete',
-      data: { 'category_id': category_id },
-      success: function (data, status) {
-        alert('Deleted succesfully.');
-        window.location = '/admin/category';
-        return;
-      },
-      error: function (error) {
-        alert(error);
-        window.location = '/admin/category';
-        return;
-      }
-    });
-  });
-})
-</script>
-
 {% endblock %}

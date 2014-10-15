@@ -33,6 +33,18 @@ module.exports.policies = {
     'profile': 'sessionAuth'
   },
 
+  'AdminController': {
+    '*': 'sessionAdmin'
+  },
+
+  'ProductController': {
+    '*': true,
+    'create': 'sessionAdmin',
+    'update': 'sessionAdmin',
+    'delete': 'sessionAdmin',
+    'status': 'sessionAdmin'
+  },
+
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *

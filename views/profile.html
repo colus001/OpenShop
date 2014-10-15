@@ -51,6 +51,7 @@
         <button type="submit" class="btn btn-primary pull-right">{{ __('저장하기') }}</button>
       </form>
     </div>
+
     <div class="col-sm-6">
       여기다 뭐쓰지
     </div>
@@ -85,24 +86,30 @@
             <td>{{ order.phone }}</td>
             <td>{{ order.address }}</td>
             <td>
-              {% if order.shipping == 'PRE' %}
+              {% if order.shipping > 0 %}
               <span class="badge badge-success">{{ __('선불') }}</span>
               {% else %}
               <span class="badge badge-warning">{{ __('후불') }}</span>
               {% endif %}
             </td>
-            <td><span class="badge badge-default">{{ order.payment }}</span></td>
+            <td>
+              {% if order.payment == 'TRANSFER' %}
+              <span class="badge badge-default">{{ __('계좌 이체') }}</span>
+              {% elseif order.payment == 'CARD' %}
+              <span class="badge badge-default">{{ __('카드') }}</span>
+              {% endif %}
+            </td>
             <td>
               {% if order.status == 'PREPARE' %}
-              <span class="badge badge-default">준비중</span>
+              <span class="badge badge-default">{{ __('준비중') }}</span>
               {% elseif order.status == 'SENT' %}
-              <span class="badge badge-primary">배송중</span>
+              <span class="badge badge-primary">{{ __('배송중') }}</span>
               {% elseif order.status == 'DONE' %}
-              <span class="badge badge-success">배송완료</span>
+              <span class="badge badge-success">{{ __('배송완료') }}</span>
               {% elseif order.status == 'CANCEL' %}
-              <span class="badge badge-danger">취소됨</span>
+              <span class="badge badge-danger">{{ __('취소됨') }}</span>
               {% else %}
-              <span class="badge badge-warning">재고없음</span>
+              <span class="badge badge-warning">{{ __('재고없음') }}</span>
               {% endif %}
             </td>
             <td>
@@ -112,6 +119,18 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <div style="text-align: center;">
+        <ul class="pagination">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

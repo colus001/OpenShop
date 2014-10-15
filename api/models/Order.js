@@ -39,9 +39,7 @@ module.exports = {
       model:'User'
     },
     shipping: {
-      type: 'STRING',
-      enum: [ 'PRE', 'POST' ],
-      required: true
+      type: 'FLOAT'
     },
     payment: {
       type: 'STRING',

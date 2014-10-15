@@ -14,8 +14,9 @@ module.exports = {
 
   findOne: function (req, res) {
     Order.findOne(req.params.id).populate('owner').exec(function (err, order) {
+      if (err) return res.serverError (err);
+
       return res.view('order.html', order);
-      // return res.json(order);
     });
   },
 
@@ -32,7 +33,7 @@ module.exports = {
       postcode: req.body.postcode,
       comment: req.body.comment,
       payment: req.body.payment,
-      shipping: req.body.shipping,
+      shipping: 0,
       price: 0,
       products: []
     }
@@ -62,7 +63,7 @@ module.exports = {
           if (err) next(err);
 
           if ( req.body.shipping === 'PRE' )
-            order.price += SHIPPING_FEE;
+            order.shipping = SHIPPING_FEE;
 
           return next(null);
         });
@@ -87,6 +88,7 @@ module.exports = {
 
             order.owner = user.id;
             order.email = user.email;
+            req.session.user = user;
 
             return next(null);
           });

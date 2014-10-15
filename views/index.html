@@ -22,6 +22,13 @@
 {% block content %}
 
 <div class="container" width="100%">
+  {% if products.length == 0 %}
+  <div style="text-align: center; margin: 150px;">
+    <h1><i class="fa fa-fw fa-warning"></i></h1>
+    <h1>{{ __('아직 등록된 상품이 없습니다.') }}</h1>
+  </div>
+  {% endif %}
+
   {% for product in products %}
   {% if loop.index == 0 || loop.index%4 == 0 %}
   <div class="row"><!-- PRODUCT -->
@@ -35,7 +42,7 @@
           <p>
             <input type="text" style="width: 20px;" value="1" /> 개
             <button data-id="{{ product.id }}" data-role="add" class="btn btn-default">{{ __('장바구니에 넣기') }}</button>
-            <a href="/cart/buy/{{ product.id }}" class="btn btn-primary" role="button">{{ __('구입') }}</a>
+            <button data-id="{{ product.id }}" data-role="buy" class="btn btn-primary">{{ __('구입') }}</button>
           </p>
         </div>
       </div>
@@ -49,17 +56,25 @@
 <script type="text/javascript">
 $(document).ready(function () {
   var $add = $('button[data-role="add"]');
-  // var $buy = $('button[data-role="buy"]')
+  var $buy = $('button[data-role="buy"]');
 
-  $add.on('click', function () {
+  $add.on('click', AddToCart);
+  $buy.on('click', AddToCart);
+
+  function AddToCart () {
     var product_id = $(this).data('id');
     var quantity = $(this).parent().find('input').val();
+    var loc = '/';
+
+    if ( $(this).data('role') === 'buy' ) {
+      loc = '/cart';
+    }
 
     $.ajax({
       type: 'GET',
       url: '/cart/add/' + product_id + '?quantity=' + quantity,
       success: function (data, status) {
-        window.location = '/';
+        window.location = loc;
         return;
       },
       error: function (error) {
@@ -67,25 +82,7 @@ $(document).ready(function () {
         return;
       }
     });
-  });
-
-  // $buy.on('click', function () {
-  //   var product_id = $(this).data('id');
-  //   var quantity = $(this).parent().find('input').val();
-
-  //   $.ajax({
-  //     type: 'GET',
-  //     url: '/cart/add/' + product_id + '?quantity=' + quantity,
-  //     success: function (data, status) {
-  //       window.location = '/';
-  //       return;
-  //     },
-  //     error: function (error) {
-  //       console.log(error);
-  //       return;
-  //     }
-  //   });
-  // });
+  }
 });
 </script>
 {% endblock %};

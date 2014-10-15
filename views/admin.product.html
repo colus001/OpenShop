@@ -17,9 +17,9 @@
 
 {% block content %}
 <div class="container">
-  <h1>PRODUCT MANAGER</h1>
-
+  <a href="/admin"><h1>PRODUCT MANAGER</h1></a>
   <hr />
+
   {% if edit %}
   <form role="form" action="/product/{{ edit.id }}" method="POST">
   {% else %}
@@ -74,20 +74,31 @@
           <textarea class="form-control" name="description" id="description" cols="30" rows="10" placeholder="{{ __('이 제품에 대한 설명을 MARKDOWN 형식으로 입력하세요') }}">{{ edit.description }}</textarea>
           <!-- <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('제품명을 입력하세요') }}"> -->
         </div>
-        <div class="checkbox">
-          <button type="submit" class="btn btn-default pull-right">Submit</button>
-          <div class="icheckbox_flat checked" style="position: relative;"><input type="checkbox" id="flat-checkbox-1" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background-color: rgb(255, 255, 255); border: 0px; opacity: 0; background-position: initial initial; background-repeat: initial initial;">
-            <ins class="iCheck-helper" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background-color: rgb(255, 255, 255); border: 0px; opacity: 0; background-position: initial initial; background-repeat: initial initial;"></ins>
+        <!-- <div class="form-group" style="margin-left: 15px;">
+          <div class="checkbox">
+            <label>
+              {% if edit.isSelling %}
+              <input type="checkbox" name="isSelling" checked> {{ __('판매') }}
+              {% else %}
+              <input type="checkbox" name="isSelling"> {{ __('판매') }}
+              {% endif %}
+            </label>
           </div>
-          <label for="flat-checkbox-1" class="">{{ __('판매') }}</label>
-        </div>
+        </div> -->
+        <p class="help-block">
+          <i class="fa fa-fw fa-warning"></i> {{ __('상품을 등록하면 기본적으로 판매 불가 상태로 저장됩니다. 하단의 Status 버튼을 클릭하여 상태를 변경하세요.') }}
+          {% if edit %}
+          <button type="submit" class="btn btn-primary btn-lg pull-right">수정하기</button>
+          {% else %}
+          <button type="submit" class="btn btn-primary btn-lg pull-right">등록하기</button>
+          {% endif %}
+        </p>
       </div>
     </div>
   </form>
-
   <hr />
 
-  <div class="row clearfix">
+  <div class="row">
     <div class="col-lg-12">
       <table class="table table-hover">
         <thead>
@@ -110,7 +121,11 @@
             <td>{{ loop.index }}</td>
             <td>{{ product.createdAt|date('Y-m-d', '-540') }}</td>
             <td>{{ product.name }}</td>
-            <td class="ellipsis">{{ product.photos }}</td>
+            <td class="ellipsis">
+              {% for photo in product.photos %}
+              <a href="{{ product.photos }}">{{ loop.index }}</a>&nbsp;
+              {% endfor %}
+            </td>
             <td>{{ product.price }}</td>
             <td>
               {% if product.stock > 0 %}
@@ -143,6 +158,18 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <div style="text-align: center;">
+        <ul class="pagination">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -156,7 +183,7 @@ $(document).ready(function () {
       type: 'PUT',
       url: '/product/status/' + product_id,
       success: function (data, status) {
-        alert('Deleted succesfully.');
+        alert('Status changed succesfully.');
         window.location = '/admin/product';
         return;
       },

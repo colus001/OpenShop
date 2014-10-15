@@ -11,12 +11,12 @@
 {% block content %}
 
 <div class="container">
-  <h2>{{ __('장바구니') }} <a href="/cart/clear" class="btn btn-warning pull-right">{{ __('장바구니 비우기') }}</a></h3>
+  <h2>{{ __('장바구니') }} <a href="/cart/clear" class="btn btn-warning pull-right">{{ __('장바구니 비우기') }}</a></h2>
 
   <hr />
 
   {% if cart.length <= 0 %}
-  <h2>{{ __('현재 장바구니가 비어있습니다') }}</h2>
+  <h3>{{ __('현재 장바구니가 비어있습니다') }}</h3>
   {% else %}
   <div class="row clearfix">
     <div class="col-lg-12">
@@ -91,10 +91,10 @@ $(document).ready(function () {
 
     $.ajax({
       type: 'DELETE',
-      url: '/product/' + product_id,
+      url: '/cart/' + product_id,
       success: function (data, status) {
         alert('Deleted succesfully.');
-        window.location = '/admin/product';
+        window.location = '/cart';
         return;
       },
       error: function (error) {

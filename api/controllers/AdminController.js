@@ -72,5 +72,17 @@ module.exports = {
       // res.json(result);
       return res.view('admin.order.html', result);
     });
+  },
+
+  user: function (req, res) {
+    var result = {};
+
+    User.find({}).populate('orders').exec(function (err, users) {
+      if (err) return res.serverError (err);
+
+      result.users = users;
+
+      return res.view('admin.user.html', result);
+    });
   }
 };

@@ -6,6 +6,22 @@
  */
 
 module.exports = {
+  create: function (req, res) {
+    Product.create(req.body, function (err, product) {
+      if (err) return res.serverError (err);
+
+      return res.redirect('/admin/product');
+    });
+  },
+
+  update: function (req, res) {
+    Product.update(req.params.id, req.body, function (err, product) {
+      if (err) return res.serverError (err);
+
+      return res.redirect('/admin/product');
+    });
+  },
+
   view: function (req, res) {
     var result = {
       user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined
@@ -16,6 +32,9 @@ module.exports = {
         Product.findOne(req.params.id, function (err, product) {
           if (err) return res.serverError(err);
           if (!product) return res.serverError('NO_PRODUCT_FOUND');
+
+          // URLIFY
+          product.description = Urlify(product.description);
 
           result.cart = req.session.cart;
           result.product = product;
@@ -121,3 +140,10 @@ module.exports = {
   // }
 };
 
+function Urlify (text) {
+  var urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  return text.replace(urlRegex, function(url) {
+      return '<a href="' + url + '" target="_blank">' + url + '</a>';
+  });
+};

@@ -24,8 +24,10 @@ module.exports = {
         async.map(products, function (item, done) {
           Product.findOne(item.id, function (err, product) {
             if (err) done (err);
-            if (!product)
+            if (!product) {
               req.session.cart.splice(products.indexOf(item), 1);
+              return done(null);
+            }
 
             var prodcutInfo = {
               id: product.id,
@@ -35,7 +37,7 @@ module.exports = {
             };
 
             cart.push(prodcutInfo);
-            done(null, product);
+            return done(null, product);
           });
         }, function (err) {
           if (err) return res.serverError(err);
@@ -47,11 +49,12 @@ module.exports = {
             result.total += cart[i].quantity;
           }
 
-          next(null, result);
-          return;
+          return next(null, result);
         });
       }
     ], function (err, result) {
+      if (err) return res.serverError (err);
+
       return res.view('cart.html', result);
     });
   },
@@ -64,7 +67,7 @@ module.exports = {
       var quantity = ( req.query.hasOwnProperty('quantity') ) ? parseInt(req.query.quantity) : 1;
 
       AddToSessionCart(req.session, product.id, quantity);
-      return res.send(req.session.cart);
+      return res.json(req.session.cart);
     });
   },
 
@@ -82,28 +85,30 @@ module.exports = {
     return res.json(cart);
   },
 
-  clear: function (req, res) {
-    req.session.cart = [];
-    return res.redirect('/');
+  delete: function (req, res) {
+    var cart = req.session.cart;
+    var id = req.params.id;
+    var quantity = parseInt(req.query.quantity);
+
+    for ( var i in cart ) {
+      if ( cart[i].id == id ) {
+        req.session.cart.splice(i, 1);
+      }
+    }
+
+    return res.json(cart);
   },
 
-  buy: function (req, res) {
-    Product.findOne(req.params.id, function (err, product) {
-      if (err) return res.serverError(err);
-      if (!product) return res.serverError('NO_PRODUCT_FOUND');
-
-      var quantity = ( req.query.hasOwnProperty('quantity') ) ? parseInt(req.query.quantity) : 1;
-
-      AddToSessionCart(req.session, product.id, quantity);
-      return res.redirect('/cart')
-    });
+  clear: function (req, res) {
+    req.session.cart = [];
+    return res.redirect('/cart');
   },
 
   checkout: function (req, res) {
     var result = {
+      user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined,
       total: 0,
-      summary: 0,
-      user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined
+      summary: 0
     };
 
     async.waterfall([

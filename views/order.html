@@ -44,10 +44,18 @@
           <tr>
             <td colspan="2"></td>
             <td>{{ __('합계') }}</td>
+            {% if shipping > 0 %}
+            <td>{{ (price+shipping)|currency }} ({{ __('배송비 포함') }})</td>
+            {% else %}
             <td>{{ price|currency }}</td>
+            {% endif %}
           </tr>
         </tbody>
       </table>
+      {% if payment == 'TRANSFER' %}
+      <br><br>
+      <p><strong>우리은행 1005-102-532536 김석준</strong>으로 입금 후 확인되면 발송됩니다.</p>
+      {% endif %}
     </div>
   </div>
 </div>

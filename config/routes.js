@@ -32,7 +32,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  // '/': { view: 'index' },
   'GET /'                 : 'ProductController.list',
   'GET /login'         : { view: 'login' },
 
@@ -47,9 +46,11 @@ module.exports.routes = {
   ***************************************************************************/
 
   // ADMIN
-  'GET  /admin/product'   : 'AdminController.product',
+  'GET  /admin'               : { view: 'admin' },
+  'GET  /admin/product'       : 'AdminController.product',
   'GET  /admin/product/:id'   : 'AdminController.product',
-  'GET  /admin/order'   : 'AdminController.order',
+  'GET  /admin/order'         : 'AdminController.order',
+  'GET  /admin/user'          : 'AdminController.user',
   // '/admin': {
   //   view: 'admin',
   //   locals: {
@@ -70,13 +71,13 @@ module.exports.routes = {
   'GET  /product/status/:id': 'ProductController.status',
 
   // ORDER & CART
-  'GET  /cart'        : 'CartController.index',
+  'GET  /cart'            : 'CartController.index',
   'PUT  /cart/apply/:id'  : 'CartController.apply',
-  'GET  /cart/add/:id': 'CartController.add',
-  'GET  /cart/clear'  : 'CartController.clear',
-  'GET  /cart/buy/:id': 'CartController.buy',
-
-  'GET /checkout'     : 'CartController.checkout',
+  'GET  /cart/add/:id'    : 'CartController.add',
+  'GET  /cart/buy/:id'    : 'CartController.add',
+  'GET  /cart/clear'      : 'CartController.clear',
+  'DELETE /cart/:id'      : 'CartController.delete',
+  'GET /checkout'         : 'CartController.checkout',
 
   // FILE & UPLOAD
 };
