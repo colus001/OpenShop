@@ -61,7 +61,7 @@ module.exports.routes = {
   'GET    /profile'             : 'UserController.profile',
 
   // PRODUCT
-  'GET    /product/view/:id'    : 'ProductController.view',
+  'GET    /product/:id'         : 'ProductController.view',
   'GET    /product/status/:id'  : 'ProductController.status',
 
   // ORDER & CART

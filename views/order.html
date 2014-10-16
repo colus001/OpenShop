@@ -32,7 +32,7 @@
         </thead>
         <tbody>
           {% for product in products %}
-          <a href="/product/view/{{ product.id }}">
+          <a href="/product/{{ product.id }}">
           <tr>
             <td>{{ loop.index }}</td>
             <td>{{ product.name }}</td>
