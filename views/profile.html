@@ -101,7 +101,9 @@
             </td>
             <td>
               {% if order.status == 'PREPARE' %}
-              <span class="badge badge-default">{{ __('준비중') }}</span>
+              <span class="badge badge-default">{{ __('결제대기') }}</span>
+              {% elseif order.status =='PAID' %}
+              <span class="badge badge-info">{{ __('결제완료') }}</span>
               {% elseif order.status == 'SENT' %}
               <span class="badge badge-primary">{{ __('배송중') }}</span>
               {% elseif order.status == 'DONE' %}
@@ -113,7 +115,10 @@
               {% endif %}
             </td>
             <td>
-              <a href="/order/{{ order.id }}" class="btn btn-xs btn-default" button-action="edit">DETAIL</a>
+              <a href="/order/{{ order.id }}" class="btn btn-xs btn-default" button-action="edit">{{ __('보기') }}</a>
+              {% if order.status === 'PREPARE' %}
+              <a href="/pay/{{ order.id }}" class="btn btn-xs btn-primary" button-action="edit">{{ __('결제') }}</a>
+              {% endif %}
             </td>
           </tr>
           {% endfor %}

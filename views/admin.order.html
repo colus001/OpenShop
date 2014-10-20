@@ -61,15 +61,17 @@
             <td><span class="badge badge-default">{{ order.payment }}</span></td>
             <td>
               {% if order.status == 'PREPARE' %}
-              <span class="badge badge-default">준비중</span>
+              <span class="badge badge-default">{{ __('결제대기') }}</span>
+              {% elseif order.status =='PAID' %}
+              <span class="badge badge-info">{{ __('결제완료') }}</span>
               {% elseif order.status == 'SENT' %}
-              <span class="badge badge-primary">배송중</span>
+              <span class="badge badge-primary">{{ __('배송중') }}</span>
               {% elseif order.status == 'DONE' %}
-              <span class="badge badge-success">배송완료</span>
+              <span class="badge badge-success">{{ __('배송완료') }}</span>
               {% elseif order.status == 'CANCEL' %}
-              <span class="badge badge-danger">취소됨</span>
+              <span class="badge badge-danger">{{ __('취소됨') }}</span>
               {% else %}
-              <span class="badge badge-warning">재고없음</span>
+              <span class="badge badge-warning">{{ __('재고없음') }}</span>
               {% endif %}
             </td>
             <td>

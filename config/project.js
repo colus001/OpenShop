@@ -14,6 +14,9 @@ module.exports.project = {
       'en': 'Won'
     },
     symbol: '₩'
+  },
+  iamport: {
+    id: 'imp45758925'
   }
 }
 

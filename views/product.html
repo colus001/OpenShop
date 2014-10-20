@@ -70,7 +70,7 @@
         <input type="text" class="form-control" id="quantity" name="quantity" value="1">
       </div>
       <button data-id="{{ product.id }}" data-role="add" class="btn btn-default btn-lg" >{{ __('장바구니에 넣기') }}</button>
-      <a href="/cart/buy/{{ product.id }}" class="btn btn-primary btn-lg" role="button">{{ __('구입') }}</a>
+      <button data-id="{{ product.id }}" data-role="buy" class="btn btn-primary btn-lg">{{ __('구입') }}</button>
       <hr>
 
       <h4>{{ __('설명') }}</h4>
@@ -87,18 +87,25 @@
 <script type="text/javascript">
 $(document).ready(function () {
   var $add = $('button[data-role="add"]');
+  var $buy = $('button[data-role="buy"]');
 
-  $add.on('click', function () {
+  $add.on('click', AddToCart);
+  $buy.on('click', AddToCart);
+
+  function AddToCart () {
     var product_id = $(this).data('id');
-    var quantity = $('input#quantity').val();
+    var quantity = $(this).parent().find('input').val();
+    var loc = '/product/' + product_id;
 
-    console.log(product_id, quantity);
+    if ( $(this).data('role') === 'buy' ) {
+      loc = '/cart';
+    }
 
     $.ajax({
       type: 'GET',
       url: '/cart/add/' + product_id + '?quantity=' + quantity,
       success: function (data, status) {
-        window.location = '/product/' + product_id;
+        window.location = loc;
         return;
       },
       error: function (error) {
@@ -106,7 +113,7 @@ $(document).ready(function () {
         return;
       }
     });
-  });
+  }
 
   var $preview = $('img.preview');
   var $thumbnail = $('#thumbnail');

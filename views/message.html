@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% block title %} Complete {% endblock %}
+
+{% block head %}
+  {% parent %}
+  <!-- STYLESHEETS -->
+  <!-- SCRIPTS -->
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1><a href="#" onclick="window.history.back();return false;"><i class="fa fa-fw fa-chevron-circle-left"></i></a>
+{{ __('알림') }}</h1>
+  <hr />
+
+  <div style="text-align: center; margin: 150px;">
+    <h1><i class="fa fa-fw fa-2x fa-bullhorn"></i></h1>
+    <h1>{{ message }}</h1>
+  </div>
+</div>
+
+{% if order.payment === 'CARD' %}
+<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment.js"/></script>
+
+<script type="text/javascript">
+var IMP = window.IMP;
+IMP.init('{{ sails.config.project.iamport.id }}');
+
+var payment = {
+  merchant_uid : '{{ order.id }}',
+  name : '{{ order.id }}',
+  amount : {{ order.price }},
+  buyer_email : '{{ order.email }}',
+  buyer_name : '{{ order.name }}',
+  buyer_tel : '{{ order.phone }}',
+  buyer_addr : '{{ order.address }}',
+  buyer_postcode : '{{ order.postcode }}'
+};
+
+IMP.request_pay(payment, function(rsp) {
+  var msg;
+
+  if ( rsp.success ) {
+    msg = '결제가 완료되었습니다.';
+    msg += '고유ID : ' + rsp.imp_uid;
+    msg += '상점 거래ID : ' + rsp.merchant_uid;
+    msg += '결제 금액 : ' + rsp.paid_amount;
+    msg += '카드 승인번호 : ' + rsp.apply_num;
+  } else {
+    msg = '결제에 실패하였습니다.';
+    msg += '에러내용 : ' + rsp.error_msg;
+  }
+
+  if ( alert(msg) ) {
+    window.location = '/order/complete';
+  }
+});
+</script>
+{% endif %}
+
+{% endblock %}

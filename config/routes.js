@@ -35,6 +35,7 @@ module.exports.routes = {
   // INDEX
   'GET    /'                    : 'ProductController.list',
   'GET    /login'               : { view: 'login' },
+  'GET    /account'             : { view: 'account'},
 
   /***************************************************************************
   *                                                                          *
@@ -72,6 +73,12 @@ module.exports.routes = {
   'GET    /cart/clear'          : 'CartController.clear',
   'DELETE /cart/:id'            : 'CartController.delete',
   'GET    /checkout'            : 'CartController.checkout',
+
+  'POST   /paid'                : 'OrderController.paid',
+  'GET    /pay/:id'             : 'OrderController.pay',
+  // 'GET    /order'               : 'OrderController.index',
+  'GET    /order/cancel/:id'    : 'OrderController.cancel',
+  'GET    /order/delivery/:id'  : 'OrderController.delivery',
 
   // FILE & UPLOAD
 };

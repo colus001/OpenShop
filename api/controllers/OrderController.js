@@ -8,15 +8,129 @@
 var SHIPPING_FEE = 3000;
 
 module.exports = {
-  // index: function (req, res) {
+  find: function (req, res) {
+    return res.view('complete.html', { failed: true });
+  },
 
-  // },
+  paid: function (req, res) {
+    sails.log('PAID:' + req.body);
+
+    Order.findOne(req.body.merchant_uid, function (err, order) {
+      if (err) return sails.log (err);
+      if (!order) return sails.log ('ORDER_NOT_FOUND');
+
+      order.status = 'PAID';
+      order.paymentCheck = req.body;
+
+      order.save(function (err, saved) {
+        if (err) sails.log (err);
+
+        return res.json(saved);
+      });
+    });
+  }, // iamport 서버 응답용
 
   findOne: function (req, res) {
-    Order.findOne(req.params.id).populate('owner').exec(function (err, order) {
+    var result = GetSessionData(req);
+
+    async.waterfall([
+      function GetOrder (next) {
+        Order.findOne(req.params.id).populate('owner').exec(function (err, order) {
+          if (err) return next (err);
+
+          result.order = order;
+
+          return next(null);
+        });
+      }
+    ], function (err) {
+      if (err) return res.serverError(err);
+
+      if ( req.query.hasOwnProperty('error') ) result.error = req.query.error.toUpperCase();
+
+      return res.view('order.html', result);
+    });
+
+  },
+
+  cancel: function (req, res) {
+    var result = GetSessionData(req);
+
+    async.waterfall([
+      function GetOrder (next) {
+        Order.findOne(req.params.id).populate('owner').exec(function (err, order) {
+          if (err) return next (err);
+          if (!order) return next ('NO_ORDER_FOUND');
+
+          if (order.owner.id !== req.session.user.id)
+            return next ('NO_PERMISSION');
+
+          order.status = 'CANCEL';
+
+          order.save(function (err, order) {
+            if (err) return next (err);
+
+            result.order = order;
+
+            return next(null);
+          });
+        });
+      }
+    ], function (err) {
       if (err) return res.serverError (err);
 
-      return res.view('order.html', order);
+      result.message = '주문을 취소하셨습니다.';
+
+      return res.view('message.html', result);
+    });
+  },
+
+  delivery: function (req, res) {
+    var result = GetSessionData(req);
+
+    async.waterfall([
+      function GetOrder (next) {
+        Order.findOne(req.params.id, function (err, order) {
+          if (err) return next (err);
+
+          if ( !order.hasOwnProperty('delivery') || order.delivery === undefined )
+            return res.json({'message': '택배 번호가 없습니다.'});
+
+          result.order = order;
+
+          return next(null);
+        });
+      }
+    ], function (err) {
+      if (err) return res.serverError (err);
+
+      result.message = '준비중입니다.';
+
+      return res.json(result);
+    });
+  },
+
+  pay: function (req, res) {
+    var result = {
+      user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined,
+      cart: (req.session.hasOwnProperty('cart')) ? req.session.cart : undefined
+    }
+
+    async.waterfall([
+      function GetOrder (next) {
+        Order.findOne(req.params.id).populate('owner').exec(function (err, order) {
+          if (err) return res.serverError (err);
+          if (order.status === 'PAID') return next('ALREADY_PAID');
+
+          result.order = order;
+
+          return next(null);
+        });
+      },
+    ], function (err) {
+      if (err) return res.redirect('/order/'+req.params.id+'?error='+err);
+
+      return res.view('pay.html', result)
     });
   },
 
@@ -109,8 +223,19 @@ module.exports = {
 
       req.session.cart = [];
 
-      return res.view('complete.html', result);
+      if ( result.order.payment === 'TRANSFER' )
+        return res.redirect('/account');
+
+      return res.redirect('/pay/' + result.order.id);
     });
   }
 };
 
+function GetSessionData (req) {
+  var result = {
+    user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined,
+    cart: (req.session.hasOwnProperty('cart')) ? req.session.cart : undefined
+  };
+
+  return result;
+}

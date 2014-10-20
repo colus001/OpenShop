@@ -9,17 +9,59 @@
 
 {% block content %}
 <div class="container">
-  <h1>ORDER DETAIL</h1>
+  <h1><a href="/profile"><i class="fa fa-fw fa-chevron-circle-left"></i></a>ORDER DETAIL</h1>
   <hr />
 
-  <div class="row clearfix">
+  <div class="row">
     <div class="col-lg-12">
-      <h3>{{ name }} {% if email %}({{ email }}){% endif %}</h3>
-      <p>{{ address }} | {{ postcode }} | {{ phone }}<p>
-      <p>{{ comment }}</p>
+      <h3>{{ order.name }} {% if order.email %}({{ order.email }}){% endif %}</h3>
+      <p><strong>{{ order.createdAt|date('Y-m-d', '-540') }}</strong> | {{ order.address }} | {{ order.postcode }} | {{ order.phone }} | {{ order.id }}</p>
+      <p>{{ order.comment }}</p>
       <hr />
     </div>
+  </div>
 
+  {% if error === 'ALREADY_PAID' %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>{{ __('결제 완료') }}!</h4>
+        <p>{{ __('이미 결제하신 주문입니다.') }}</p>
+        <p>
+          <a class="btn btn-primary" href="/order/delivery/{{ order.id }}">{{ __('배송확인') }}</a>
+          <a class="btn btn-link" href="/order/cancel/{{ order.id }}" onclick="return confirm('{{ __('주문을 취소하시겠습니까?') }}')">{{ __('주문취소') }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% elseif order.status === 'PREPARE' %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>{{ __('결제 대기중') }}!</h4>
+        <p>{{ __('이 주문은 아직 결제가 완료되지 않았습니다.') }} {{ __('결제가 확인되면 배송이 시작됩니다.') }} {{ __('결제를 진행하시거나 주문을 취소하시려면 아래 버튼을 선택하세요.') }}</p>
+        <p>
+          <a class="btn btn-warning" href="/pay/{{ order.id }}">{{ __('결제하기') }}</a>
+          <a class="btn btn-link" href="/order/cancel/{{ order.id }}" onclick="return confirm('{{ __('주문을 취소하시겠습니까?') }}')">{{ __('주문취소') }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% elseif order.status === 'PAID' && !order.delivery %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4>{{ __('배송 준비중') }}!</h4>
+        <p>{{ __(' 배송을 준비하고 있습니다.') }} {{ __('잠시만 기다려주세요!') }}</p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row">
     <div class="col-lg-12">
       <table class="table table-hover">
         <thead>
@@ -31,7 +73,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for product in products %}
+          {% for product in order.products %}
           <a href="/product/{{ product.id }}">
           <tr>
             <td>{{ loop.index }}</td>
@@ -44,19 +86,24 @@
           <tr>
             <td colspan="2"></td>
             <td>{{ __('합계') }}</td>
-            {% if shipping > 0 %}
-            <td>{{ (price+shipping)|currency }} ({{ __('배송비 포함') }})</td>
+            {% if order.shipping > 0 %}
+            <td>{{ (order.price+order.shipping)|currency }} ({{ __('배송비 포함') }})</td>
             {% else %}
-            <td>{{ price|currency }}</td>
+            <td>{{ order.price|currency }}</td>
             {% endif %}
           </tr>
         </tbody>
       </table>
-      {% if payment == 'TRANSFER' %}
+      {% if order.delivery %}
+      <a href="/order/delivery/{{ order.id }}">배송 확인</a>
+      {% endif %}
+
+      {% if order.payment == 'TRANSFER' && order.status !== 'PAID' %}
       <br><br>
       <p><strong>우리은행 1005-102-532536 김석준</strong>으로 입금 후 확인되면 발송됩니다.</p>
       {% endif %}
     </div>
+    <hr>
   </div>
 </div>
 

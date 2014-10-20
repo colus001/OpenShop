@@ -46,9 +46,15 @@ module.exports = {
       enum: [ 'TRANSFER', 'CARD' ],
       required: true,
     },
+    paymentCheck: {
+      type: 'STRING'
+    },
+    delivery: {
+      type: 'STRING'
+    },
     status: {
       type: 'STRING', // PREPARE / SENT / DONE / CANCEL / SOLD-OUT
-      enum: [ 'PREPARE', 'SENT', 'DONE', 'CANCEL', 'SOLD-OUT' ],
+      enum: [ 'PREPARE', 'PAID', 'SENT', 'DONE', 'CANCEL', 'SOLD-OUT' ],
       defaultsTo: 'PREPARE'
     }
   }

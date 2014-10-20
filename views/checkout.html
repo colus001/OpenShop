@@ -52,7 +52,7 @@
       <h2>{{ __('배송 정보 입력') }}</h2>
       <hr />
 
-      <form role="form" action="/order" method="POST">
+      <form role="form" id="order" action="/order" method="POST">
         <div class="row">
           <div class="col-sm-4">
             <div class="form-group">
@@ -117,11 +117,12 @@
         <div class="form-horizontal">
           <div class="form-group">
             <div class="col-sm-2">
-              <select class="form-control" name="payment">
+              <select id="payment" class="form-control" name="payment">
                 <option value="TRANSFER">{{ __('계좌 이체') }}</option>
+                <option value="CARD">{{ __('카드 결제') }}</option>
               </select>
             </div>
-            <label id="payment" class="control-label">우리은행 1005-102-532536 김석준</label>
+            <label id="payment-label" class="control-label">우리은행 1005-102-532536 김석준</label>
           </div>
           <p class="help-block">{{ __('현재 계좌 이체를 제외한 결제 방법은 지원하지 않고 있으니 양해 부탁드립니다.') }}</p>
         </div>
