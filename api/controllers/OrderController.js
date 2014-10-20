@@ -16,8 +16,12 @@ module.exports = {
     sails.log('PAID:' + req.body);
 
     Order.findOne(req.body.merchant_uid, function (err, order) {
-      if (err) return sails.log (err);
-      if (!order) return sails.log ('ORDER_NOT_FOUND');
+      if (err) return res.serverError (err);
+
+      if (!order) {
+        sails.log ('ORDER_NOT_FOUND');
+        return res.json({ result: 'fail', message: 'ORDER_NOT_FOUND' });
+      }
 
       order.status = 'PAID';
       order.paymentCheck = req.body;
