@@ -47,7 +47,10 @@ module.exports = {
       required: true,
     },
     paymentCheck: {
-      type: 'STRING'
+      type: 'JSON'
+    },
+    paymentLog: {
+      type: 'JSON'
     },
     delivery: {
       type: 'STRING'

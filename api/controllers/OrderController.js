@@ -24,7 +24,11 @@ module.exports = {
       }
 
       order.status = 'PAID';
-      order.paymentCheck = req.body;
+
+      if ( req.body.hasOwnProperty('apply_num') )
+        order.paymentLog = req.body;
+      else
+        order.paymentCheck = req.body;
 
       order.save(function (err, saved) {
         if (err) sails.log (err);
