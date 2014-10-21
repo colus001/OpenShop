@@ -23,7 +23,8 @@
     <a href="/order/{{ order.id }}" class="btn btn-lg btn-default">{{ __('주문확인') }}</a>
   {% elseif order.payment === 'CARD' && order.status === 'PREPARE' %}
     <h1><i class="fa fa-fw fa-2x fa-spin fa-refresh"></i></h1>
-    <h1>{{ __('결제가 진행중입니다.') }}</h1>
+    <h1>{{ (order.price+order.shipping)|currency }} {{ __('결제가 진행중입니다.') }}</h1>
+    <h3>{{ __('페이지를 닫거나 다른 사이트로 이동하지 마세요.') }}</h3>
   {% else %}
     <h1><i class="fa fa-fw fa-2x fa-ban"></i></h1>
     <h1>{{ __('이미 결제하셨거나 취소된 주문입니다.') }}</h1>
@@ -41,7 +42,7 @@ IMP.init('{{ sails.config.project.iamport.id }}');
 var payment = {
   merchant_uid : '{{ order.id }}',
   name : '{{ order.id }}',
-  amount : {{ order.price }},
+  amount : {{ order.price+order.shipping }},
   buyer_email : '{{ order.email }}',
   buyer_name : '{{ order.name }}',
   buyer_tel : '{{ order.phone }}',
@@ -54,18 +55,16 @@ IMP.request_pay(payment, function(rsp) {
 
   if ( rsp.success ) {
     msg = '결제가 완료되었습니다.';
-    msg += '고유ID : ' + rsp.imp_uid;
-    msg += '상점 거래ID : ' + rsp.merchant_uid;
     msg += '결제 금액 : ' + rsp.paid_amount;
-    msg += '카드 승인번호 : ' + rsp.apply_num;
+    msg += ', 카드 승인번호 : ' + rsp.apply_num;
 
     $.ajax({
       type: 'POST',
       url: '/order/paid',
       data: rsp,
       success: function (data, success) {
-        if ( alert(msg) )
-          window.location = '/order/{{ order.id }}';
+        alert(msg);
+        window.location = '/order/{{ order.id }}';
       },
       error: function (error) {
         return alert(error);
