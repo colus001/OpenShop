@@ -13,9 +13,9 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="{{ __('제품명을 입력하세요') }}" disabled>
+          <input type="text" class="form-control" placeholder="{{ __('제품명을 입력하세요') }}" name="name" value="{{ query }}"/>
         </div>
-        <button type="submit" class="btn btn-default disabled">{{ __('검색') }}</button>
+        <button type="submit" class="btn btn-default">{{ __('검색') }}</button>
       </form>
 
       <ul class="nav navbar-nav navbar-right">

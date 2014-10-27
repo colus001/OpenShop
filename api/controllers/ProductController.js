@@ -54,9 +54,18 @@ module.exports = {
       user: (req.session.hasOwnProperty('user')) ? req.session.user : undefined
     };
 
+    var query = {
+      isSelling: true
+    }
+
+    if ( req.query.hasOwnProperty('name') ) {
+      // query.name = new RegExp('/\s?[^a-z0-9\_]'+req.query.name+'[^a-z0-9\_]/i', 'g', 'gi');
+      query.name = new RegExp(req.query.name);
+    }
+
     async.waterfall([
       function GetProductList (next) {
-        Product.find({ isSelling: true }, function (err, products) {
+        Product.find(query, function (err, products) {
           if (err) next(err);
 
           result.products = products;
@@ -71,6 +80,8 @@ module.exports = {
         result.cart = req.session.cart;
       else
         result.cart = [];
+
+      result.query = ( req.query.hasOwnProperty('name') ) ? req.query.name : undefined;
 
       return res.view('index.html', result);
     });

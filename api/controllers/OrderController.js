@@ -12,6 +12,24 @@ module.exports = {
     return res.view('complete.html', { failed: true });
   },
 
+  check: function (req, res) {
+    Order.findOne(req.body.merchant_uid, function (err, order) {
+      if (err) return res.serverError (err);
+
+      if (!order) {
+        sails.log ('ORDER_NOT_FOUND');
+        return res.json({ confirm: false, message: 'ORDER_NOT_FOUND' });
+      }
+
+      if ( order.price !== amount ) {
+        sails.log({ abuser: order.email });
+        return res.json({ confirm: false, reason: 'PRICE_NOT_MATCH' });
+      }
+
+      return res.json({ confirm: true });
+    });
+  },
+
   paid: function (req, res) {
     sails.log('PAID:' + req.body);
 
@@ -37,6 +55,37 @@ module.exports = {
       });
     });
   }, // iamport 서버 응답용
+
+  change: function (req, res) {
+    var result = GetSessionData(req);
+
+    async.waterfall([
+      function GetOrder (next) {
+        Order.findOne(req.params.id, function (err, order) {
+          if (err) return next (err);
+
+          if ( req.query.hasOwnProperty('type') )
+            order.status = req.query.type;
+
+          return next(null, order);
+        });
+      },
+
+      function SetOrder (order, next) {
+        order.save(function (err, saved) {
+          if (err) return next (err);
+
+          result.order = saved;
+
+          return next(null);
+        });
+      }
+    ], function (err) {
+      if (err) return res.serverError(err);
+
+      res.redirect('/admin/order');
+    });
+  },
 
   findOne: function (req, res) {
     var result = GetSessionData(req);

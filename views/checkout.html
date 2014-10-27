@@ -119,12 +119,16 @@
             <div class="col-sm-2">
               <select id="payment" class="form-control" name="payment">
                 <option value="TRANSFER">{{ __('계좌 이체') }}</option>
+                {% if sails.config.project.paymentMethods.iamport.using %}
                 <option value="CARD">{{ __('카드 결제') }}</option>
+                {% endif %}
               </select>
             </div>
             <label id="payment-label" class="control-label">우리은행 1005-102-532536 김석준</label>
           </div>
+          {% if !sails.config.project.paymentMethods.iamport.using %}
           <p class="help-block">{{ __('현재 계좌 이체를 제외한 결제 방법은 지원하지 않고 있으니 양해 부탁드립니다.') }}</p>
+          {% endif %}
         </div>
         <hr />
 

@@ -18,7 +18,7 @@ module.exports = {
       type: 'ARRAY'
     },
     price: {
-      type: 'INTEGER',
+      type: 'FLOAT',
       required: true
     },
     description: {

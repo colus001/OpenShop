@@ -75,8 +75,29 @@
               {% endif %}
             </td>
             <td>
-              <a href="/order/{{ order.id }}" class="btn btn-xs btn-default" button-action="edit">RAW</a>
-              <button class="btn btn-xs btn-danger" button-action="delete">DELETE</button>
+              <div class="btn-group">
+                <button class="btn btn-xs btn-default">Action</button>
+                <button class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/order/{{ order.id }}">{{ __('주문보기') }}</a></li>
+                  {% if order.status !== 'CANCEL' %}
+
+                  {% if order.status !== 'PAID' %}
+                  <li><a href="/order/change/{{ order.id }}?type=PAID">{{ __('결재완료') }}</a></li>
+                  {% else %}
+                  <li><a href="/order/change/{{ order.id }}?type=PREPARE">{{ __('결재취소') }}</a></li>
+                  {% endif %}
+                  <li><a href="#">{{ __('송장입력') }}</a></li>
+                  <li><a href="/order/cancel/{{ order.id }}">{{ __('취소하기') }}</a></li>
+
+                  {% endif %}
+                  <li class="divider"></li>
+                  <li><a href="#" data-id="{{ order.id }}" button-action="delete">{{ __('삭제') }}</a></li>
+                </ul>
+              </div>
             </td>
           </tr>
           {% endfor %}
@@ -110,7 +131,7 @@ $(document).ready(function () {
       return;
     }
 
-    var product_id = $(this).parent().parent().data('id');
+    var product_id = $(this).data('id');
 
     $.ajax({
       type: 'DELETE',

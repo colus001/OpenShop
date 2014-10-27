@@ -79,6 +79,8 @@ module.exports.routes = {
   // 'GET    /order'               : 'OrderController.index',
   'GET    /order/cancel/:id'    : 'OrderController.cancel',
   'GET    /order/delivery/:id'  : 'OrderController.delivery',
+  'GET    /order/check'         : 'OrderController.check',
+  'GET    /order/change'        : 'OrderController.change',
 
   // FILE & UPLOAD
 };

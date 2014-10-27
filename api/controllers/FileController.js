@@ -6,7 +6,7 @@
  */
 
 module.exports = {
-  index: function (req,res){
+  index: function (req, res) {
     res.writeHead(200, {'content-type': 'text/html'});
     res.end(
     '<form action="http://localhost:1337/file/upload" enctype="multipart/form-data" method="post">'+
@@ -20,7 +20,12 @@ module.exports = {
   upload: function  (req, res) {
     var thumbnail = req.file('thumbnail');
 
-    thumbnail.upload(function UploadFile (err, files) {
+    thumbnail.upload({
+      adapter: require('skipper-s3'),
+      key: 'AKIAJZMLJFB4MAKEKDXA',
+      secret: '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',
+      bucket: 'album-images'
+    }, function (err, files) {
       if (err) return res.serverError(err);
 
       return res.json({
