@@ -22,9 +22,9 @@ module.exports = {
 
     thumbnail.upload({
       adapter: require('skipper-s3'),
-      key: 'AKIAJZMLJFB4MAKEKDXA',
-      secret: '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',
-      bucket: 'album-images'
+      key: sails.config.project.s3.key,
+      secret: sails.config.project.s3.secret,
+      bucket: sails.config.project.s3.bucket
     }, function (err, files) {
       if (err) return res.serverError(err);
 
