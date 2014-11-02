@@ -83,4 +83,7 @@ module.exports.routes = {
   'GET    /order/change'        : 'OrderController.change',
 
   // FILE & UPLOAD
+  'GET    /upload'              : 'FileController.upload',
+  'GET    /image/:id'           : 'FileController.retrieve',
+  'GET    /test'                : 'FileController.test',
 };

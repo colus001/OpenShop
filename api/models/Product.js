@@ -17,6 +17,9 @@ module.exports = {
     photos: {
       type: 'ARRAY'
     },
+    video: {
+      type: 'STRING'
+    },
     price: {
       type: 'FLOAT',
       required: true
@@ -39,8 +42,8 @@ module.exports = {
     tags: {
       type: 'ARRAY'
     },
-    // brand: {
-    //   model: 'Brand'
+    // provider: {
+    //   model: 'Provider'
     // },
     // category: {
     //   model: 'Category',
@@ -73,8 +76,7 @@ module.exports = {
       values.tags = tagsValue;
     }
 
-    callback();
-    return;
-  }
+    return callback();
+  },
 };
 

@@ -43,6 +43,10 @@
 
       <div class="col-lg-6">
         <div class="form-group">
+          <label for="video">{{ __('VIMEO 영상 ID') }}</label><br>
+          <input type="text" class="form-control" id="video" name="video" placeholder="{{ __('VIMEO 영상 ID를 입력하세요.') }}" value="{{ edit.video }}">
+        </div>
+        <div class="form-group">
           <label for="thumbnail">{{ __('대표 사진') }}</label><br>
           <input type="text" class="form-control" id="thumbnail" name="thumbnail" placeholder="{{ __('대표 이미지 URL을 입력하세요') }}" value="{{ edit.thumbnail }}">
         </div>

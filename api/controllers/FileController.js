@@ -5,6 +5,8 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
+var adapter = 'skipper-' + sails.config.project.fileSystem;;
+
 module.exports = {
   index: function (req, res) {
     res.writeHead(200, {'content-type': 'text/html'});
@@ -18,10 +20,10 @@ module.exports = {
   },
 
   upload: function  (req, res) {
-    var thumbnail = req.file('thumbnail');
+    var image = req.file('thumbnail');
 
-    thumbnail.upload({
-      adapter: require('skipper-s3'),
+    image.upload({
+      adapter: require(adapter),
       key: sails.config.project.s3.key,
       secret: sails.config.project.s3.secret,
       bucket: sails.config.project.s3.bucket
@@ -33,5 +35,21 @@ module.exports = {
         files: files
       });
     });
+  },
+
+  retrieve: function (req, res) {
+    var blobAdapter = require(adapter)({
+      uri: 'mongodb://localhost:27017/open-shop-images.product'
+    });
+
+    blobAdapter.read(req.params.id, function (err, files) {
+      if (err) return res.serverError(err);
+
+      res.send(files);
+    });
+  },
+
+  test: function (req, res) {
+    res.view('test.html');
   }
 };
