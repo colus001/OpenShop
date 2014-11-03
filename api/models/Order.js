@@ -36,7 +36,7 @@ module.exports = {
       type: 'FLOAT'
     },
     owner:{
-      model:'User'
+      model: 'User'
     },
     shipping: {
       type: 'FLOAT'

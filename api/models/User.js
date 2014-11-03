@@ -34,9 +34,12 @@ module.exports = {
       collection: 'Order',
       via: 'owner'
     },
+    provider: {
+      model: 'Provider'
+    },
     permission: {
       type: 'STRING',
-      enum: [ 'ADMIN', 'CUSTOMER' ],
+      enum: [ 'ADMIN', 'CUSTOMER', 'PROVIDER' ],
       defaultsTo: 'CUSTOMER'
     }
   },

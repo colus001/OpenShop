@@ -5,6 +5,12 @@
 {% block head %}
   {% parent %}
   <!-- STYLESHEETS -->
+  <style>
+    .error {
+      color: red;
+      margin: 5px;
+    }
+  </style>
   <!-- SCRIPTS -->
 {% endblock %}
 
@@ -57,16 +63,16 @@
           <div class="col-sm-4">
             <div class="form-group">
               <label for="name">{{ __('받으시는 분') }}</label>
-              <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('받으시는 분의 성함을 입력하세요') }}" value="{{ user.name }}">
+              <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('받으시는 분의 성함을 입력하세요') }}" value="{{ user.name }}" required>
             </div>
             <div class="form-group">
               <label for="phone">{{ __('전화번호') }}</label>
-              <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ __('연락받으실 전화번호를 입력하세요') }}" value="{{ user.phone }}">
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ __('연락받으실 전화번호를 입력하세요') }}" value="{{ user.phone }}" required>
             </div>
             {% if !user %}
             <div class="form-group">
               <label for="email">{{ __('이메일') }}</label>
-              <input type="text" class="form-control" id="email" name="email" placeholder="{{ __('연락받으실 전화번호를 입력하세요') }}" value="{{ user.email }}">
+              <input type="text" class="form-control" id="email" name="email" placeholder="{{ __('연락받으실 전화번호를 입력하세요') }}" value="{{ user.email }}" required>
             </div>
             {% endif %}
             {% if user %}
@@ -83,11 +89,11 @@
           <div class="col-sm-8">
             <div class="form-group">
               <label for="address">{{ __('주소') }}</label>
-              <input type="text" class="form-control" id="address" name="address" placeholder="{{ __('주소를 입력하세요') }}" value="{{ user.address }}">
+              <input type="text" class="form-control" id="address" name="address" placeholder="{{ __('주소를 입력하세요') }}" value="{{ user.address }}" required>
             </div>
             <div class="form-group">
               <label for="postcode">{{ __('우편번호') }}</label>
-              <input type="text" class="form-control" id="postcode" name="postcode" placeholder="{{ __('우편번호를 입력하세요') }}" value="{{ user.postcode }}">
+              <input type="text" class="form-control" id="postcode" name="postcode" placeholder="{{ __('우편번호를 입력하세요') }}" value="{{ user.postcode }}" required>
             </div>
             <div class="form-group">
               <label for="comment">{{ __('배송시 주의사항') }}</label>
@@ -141,6 +147,20 @@
 
 <script type="text/javascript">
 $(document).ready(function () {
+  $('#order').validate({
+    lang: 'ko',
+    highlight: function(element) {
+        $(element).closest('.form-group').addClass('has-error');
+    },
+    unhighlight: function(element) {
+        $(element).closest('.form-group').removeClass('has-error');
+    }
+  });
+
+  jQuery.extend(jQuery.validator.messages, {
+    required: "필수 입력 항목입니다.",
+  });
+
   $('[button-action="apply"]').on('click', function () {
     var product_id = $(this).parent().parent().data('id');
     var quantity = $(this).parent().parent().find('input').val();

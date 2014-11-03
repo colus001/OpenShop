@@ -42,13 +42,13 @@ module.exports = {
     tags: {
       type: 'ARRAY'
     },
-    // provider: {
-    //   model: 'Provider'
-    // },
-    // category: {
-    //   model: 'Category',
-    //   required: true
-    // },
+    provider: {
+      model: 'Provider'
+    },
+    category: {
+      model: 'Category',
+      // required: true
+    },
   },
 
   beforeValidate: function (values, callback) {
