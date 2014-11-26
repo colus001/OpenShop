@@ -5,7 +5,7 @@
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
 
-var adapter = 'skipper-' + sails.config.project.fileSystem;;
+var adapter = 'skipper-' + sails.config.project.fileSystem;
 
 module.exports = {
   index: function (req, res) {
