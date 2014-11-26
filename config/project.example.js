@@ -6,6 +6,7 @@ module.exports.project = {
   description: 'OPEN SHOP for FLIT electronics.',
   version: '0.2.0',
   year: new Date().getFullYear(),
+  website: 'http://google.com',
   currency: {
     position: 'FRONT', // FRONT / END
     exchange_rate: 1000,
@@ -28,6 +29,16 @@ module.exports.project = {
     key: '',
     secret: '',
     bucket: ''
+  },
+  fileSystem: '', // s3, gridfs, local,
+  disqusShortname: '',
+  nodemailer: {
+    auth: {
+      user: 'google@gmail.com',
+      pass: ''
+    },
+    sender: 'OPEN SHOP ✔ <google@gmail.com>',
+    mailToAlert: 'admin@gmail.com'
   }
 }
 

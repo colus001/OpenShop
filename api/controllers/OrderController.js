@@ -271,6 +271,7 @@ module.exports = {
           if (err) next (err);
 
           result.order = created;
+          EmailService.sendAlertEmail();
 
           return next(null);
         });
@@ -280,8 +281,7 @@ module.exports = {
 
       req.session.cart = [];
 
-      if ( result.order.payment === 'TRANSFER' )
-        return res.redirect('/account');
+      if ( result.order.payment === 'TRANSFER' ) return res.redirect('/account');
 
       return res.redirect('/pay/' + result.order.id);
     });
